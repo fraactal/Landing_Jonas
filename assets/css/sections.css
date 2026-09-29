@@ -208,6 +208,74 @@
   opacity: 0.85;
 }
 
+.problem-prompt {
+  display: grid;
+  align-items: center;
+  padding-block: clamp(4.5rem, 12vw, 9rem);
+}
+
+.problem-prompt__inner {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.problem-prompt__accessible {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.problem-prompt__visual {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  width: min(100%, 58rem);
+}
+
+.problem-prompt__label {
+  margin: 0;
+  color: var(--color-muted);
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 7vw, 4.75rem);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: var(--line-height-heading);
+}
+
+.problem-prompt__dynamic {
+  display: grid;
+  min-height: 2.4em;
+  align-items: center;
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 9vw, 6rem);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.problem-prompt__dynamic.is-changing {
+  opacity: 0;
+  transform: translateY(0.35rem);
+}
+
+.problem-prompt__closing {
+  max-width: 36rem;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--font-size-2);
+  line-height: var(--line-height-body);
+  text-wrap: balance;
+}
 @media (min-width: 48rem) {
   .nav-toggle {
     display: none;
@@ -237,13 +305,21 @@
   .hero-diagram {
     padding: var(--space-8);
   }
+  .problem-prompt__visual {
+    gap: var(--space-5);
+  }
+
+  .problem-prompt__dynamic {
+    min-height: 1.2em;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .site-header,
   .site-nav,
   .hero-diagram,
-  .diagram-connector {
+  .diagram-connector,
+  .problem-prompt__dynamic {
     transition: none;
   }
 }

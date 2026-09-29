@@ -31,3 +31,68 @@ if (header && toggle && nav) {
     }
   });
 }
+const dynamicProblem = document.querySelector("[data-dynamic-problem]");
+
+if (dynamicProblem) {
+  const problems = [
+    "un proceso manual?",
+    "sistemas desconectados?",
+    "falta de visibilidad?",
+    "una aplicación pendiente?",
+    "infraestructura inestable?",
+    "datos que no estás aprovechando?",
+    "demasiados errores o pruebas manuales?",
+  ];
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let index = 0;
+  let intervalId;
+
+  const stopRotation = () => {
+    if (intervalId) {
+      window.clearInterval(intervalId);
+      intervalId = undefined;
+    }
+  };
+
+  const showNextProblem = () => {
+    dynamicProblem.classList.add("is-changing");
+
+    window.setTimeout(() => {
+      index = (index + 1) % problems.length;
+      dynamicProblem.textContent = problems[index];
+      dynamicProblem.classList.remove("is-changing");
+    }, 220);
+  };
+
+  const startRotation = () => {
+    if (reduceMotion.matches || document.hidden || intervalId) {
+      return;
+    }
+
+    intervalId = window.setInterval(showNextProblem, 2800);
+  };
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      stopRotation();
+      return;
+    }
+
+    startRotation();
+  });
+
+  reduceMotion.addEventListener("change", () => {
+    stopRotation();
+    dynamicProblem.classList.remove("is-changing");
+
+    if (reduceMotion.matches) {
+      dynamicProblem.textContent = problems[0];
+      index = 0;
+      return;
+    }
+
+    startRotation();
+  });
+
+  startRotation();
+}
