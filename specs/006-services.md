@@ -2,7 +2,7 @@
 
 ## Estado
 
-Pendiente de implementacion.
+Implementada.
 
 Esta spec define la futura seccion comercial de servicios de `jonathanvaldes.com`. En este modulo solo se prepara la especificacion; no se implementa HTML, CSS ni JavaScript.
 
