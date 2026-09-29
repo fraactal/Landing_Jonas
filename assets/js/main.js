@@ -96,3 +96,73 @@ if (dynamicProblem) {
 
   startRotation();
 }
+const problemOptions = document.querySelectorAll("[data-problem-option]");
+const problemDetailTitle = document.querySelector("[data-problem-detail-title]");
+const problemDetailCopy = document.querySelector("[data-problem-detail-copy]");
+const problemDetailCta = document.querySelector("[data-problem-detail-cta]");
+const problemDetail = document.querySelector(".problem-detail");
+
+if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemDetailCta && problemDetail) {
+  const problemContent = {
+    automation: {
+      title: "Automatizar un proceso",
+      description: "Podemos ayudarte a identificar tareas repetitivas, diseñar el flujo y evaluar qué partes pueden automatizarse sin complicar innecesariamente la operación.",
+    },
+    app: {
+      title: "Crear una aplicación",
+      description: "Podemos ayudarte a definir, diseñar y construir una aplicación, sistema interno, API o MVP que resuelva una necesidad concreta sin sobredimensionar el proyecto.",
+    },
+    integration: {
+      title: "Conectar sistemas",
+      description: "Podemos ayudarte a integrar plataformas, APIs, bases de datos o servicios que hoy funcionan separados para que la información fluya con menos trabajo manual.",
+    },
+    data: {
+      title: "Trabajar con mis datos",
+      description: "Podemos ayudarte a consolidar, transformar y visualizar datos mediante reportes, dashboards o flujos que apoyen mejores decisiones del negocio.",
+    },
+    infrastructure: {
+      title: "Mejorar infraestructura",
+      description: "Podemos ayudarte a ordenar despliegues, cloud, Docker, CI/CD y automatización para que tu infraestructura sea más confiable y fácil de operar.",
+    },
+    quality: {
+      title: "Mejorar calidad",
+      description: "Podemos ayudarte a reducir errores con pruebas funcionales, automatización, regresión y controles que den más confianza antes de publicar cambios.",
+    },
+    monitoring: {
+      title: "Mejorar monitoreo / visibilidad",
+      description: "Podemos ayudarte a implementar métricas, logs, alertas y dashboards para entender qué está ocurriendo en tus sistemas y operación.",
+    },
+    unsure: {
+      title: "No estoy seguro",
+      description: "No necesitas saber la solución técnica. Podemos empezar entendiendo qué ocurre, qué necesitas lograr y qué alternativas tienen sentido para tu caso.",
+    },
+  };
+
+  const setSelectedProblem = (selectedButton) => {
+    const content = problemContent[selectedButton.dataset.problemOption];
+
+    if (!content) {
+      return;
+    }
+
+    problemOptions.forEach((button) => {
+      const isSelected = button === selectedButton;
+      button.classList.toggle("is-selected", isSelected);
+      button.setAttribute("aria-pressed", String(isSelected));
+    });
+
+    problemDetail.classList.add("is-changing");
+    window.setTimeout(() => {
+      problemDetailTitle.textContent = content.title;
+      problemDetailCopy.textContent = content.description;
+      problemDetailCta.hidden = false;
+      problemDetail.classList.remove("is-changing");
+    }, 120);
+  };
+
+  problemOptions.forEach((button) => {
+    button.addEventListener("click", () => {
+      setSelectedProblem(button);
+    });
+  });
+}

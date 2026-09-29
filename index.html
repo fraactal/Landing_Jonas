@@ -99,6 +99,59 @@
           </div>
         </div>
       </section>
+      <section class="problem-selector section" aria-labelledby="problem-selector-title">
+        <div class="container problem-selector__inner">
+          <div class="problem-selector__heading flow">
+            <p class="problem-selector__eyebrow">Orientación inicial</p>
+            <h2 id="problem-selector-title">¿Qué necesitas resolver?</h2>
+            <p>Elige la opción que más se parece a tu situación. No necesitas tener definida la solución técnica.</p>
+          </div>
+
+          <div class="problem-selector__layout">
+            <div class="problem-selector__grid" aria-label="Opciones de problemas">
+              <button class="problem-option" type="button" aria-pressed="false" aria-controls="problem-selector-detail" data-problem-option="automation">
+                <span class="problem-option__number">01</span>
+                <span class="problem-option__title">Automatizar un proceso</span>
+              </button>
+              <button class="problem-option" type="button" aria-pressed="false" aria-controls="problem-selector-detail" data-problem-option="app">
+                <span class="problem-option__number">02</span>
+                <span class="problem-option__title">Crear una aplicación</span>
+              </button>
+              <button class="problem-option" type="button" aria-pressed="false" aria-controls="problem-selector-detail" data-problem-option="integration">
+                <span class="problem-option__number">03</span>
+                <span class="problem-option__title">Conectar sistemas</span>
+              </button>
+              <button class="problem-option" type="button" aria-pressed="false" aria-controls="problem-selector-detail" data-problem-option="data">
+                <span class="problem-option__number">04</span>
+                <span class="problem-option__title">Trabajar con mis datos</span>
+              </button>
+              <button class="problem-option" type="button" aria-pressed="false" aria-controls="problem-selector-detail" data-problem-option="infrastructure">
+                <span class="problem-option__number">05</span>
+                <span class="problem-option__title">Mejorar infraestructura</span>
+              </button>
+              <button class="problem-option" type="button" aria-pressed="false" aria-controls="problem-selector-detail" data-problem-option="quality">
+                <span class="problem-option__number">06</span>
+                <span class="problem-option__title">Mejorar calidad</span>
+              </button>
+              <button class="problem-option" type="button" aria-pressed="false" aria-controls="problem-selector-detail" data-problem-option="monitoring">
+                <span class="problem-option__number">07</span>
+                <span class="problem-option__title">Mejorar monitoreo / visibilidad</span>
+              </button>
+              <button class="problem-option" type="button" aria-pressed="false" aria-controls="problem-selector-detail" data-problem-option="unsure">
+                <span class="problem-option__number">08</span>
+                <span class="problem-option__title">No estoy seguro</span>
+              </button>
+            </div>
+
+            <aside class="problem-detail" id="problem-selector-detail" aria-labelledby="problem-detail-title">
+              <p class="problem-detail__eyebrow">Respuesta contextual</p>
+              <h3 id="problem-detail-title" data-problem-detail-title>Selecciona una opción</h3>
+              <p data-problem-detail-copy>Selecciona una opción para explorar cómo podemos ayudarte.</p>
+              <a class="button button--primary problem-detail__cta" href="#contacto-pendiente" data-problem-detail-cta hidden>Cuéntame tu caso</a>
+            </aside>
+          </div>
+        </div>
+      </section>
     </main>
   </body>
 </html>
