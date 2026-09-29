@@ -3,42 +3,86 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Jonathan Valdes - Base visual</title>
-    <meta name="description" content="Base tecnica y visual en preparacion para jonathanvaldes.com.">
+    <title>Jonathan Valdés - Soluciones tecnológicas</title>
+    <meta name="description" content="Desarrollo, automatización, integraciones, cloud, datos, QA y monitoreo para empresas que necesitan resolver problemas tecnológicos.">
     <meta name="color-scheme" content="dark">
     <meta name="theme-color" content="#0B0D10">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/styles.css">
+    <script src="assets/js/main.js" defer></script>
   </head>
-  <body>
+  <body id="top">
+    <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
+
+    <header class="site-header" data-site-header>
+      <div class="container site-header__inner">
+        <a class="site-brand" href="#top" aria-label="Ir al inicio">Jonathan Valdés</a>
+
+        <button
+          class="nav-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="primary-navigation"
+          data-nav-toggle
+        >
+          <span class="nav-toggle__line"></span>
+          <span class="nav-toggle__line"></span>
+          <span class="nav-toggle__label">Menú</span>
+        </button>
+
+        <nav class="site-nav" id="primary-navigation" aria-label="Navegación principal" data-site-nav>
+          <a href="#soluciones">Soluciones</a>
+          <a href="#como-trabajamos">Cómo trabajamos</a>
+          <a href="#proyectos">Proyectos</a>
+          <a href="#faq">FAQ</a>
+          <a class="button button--secondary site-nav__secondary" href="#agenda-pendiente">Agenda hoy mismo</a>
+          <a class="button button--primary" href="#contacto-pendiente">Háblanos hoy</a>
+        </nav>
+      </div>
+    </header>
+
     <main id="main-content">
-      <section class="section" aria-labelledby="m02-preview-title">
-        <div class="container stack">
-          <div class="flow" style="--flow-space: var(--space-3);">
-            <p>Preview de desarrollo M02</p>
-            <h1 id="m02-preview-title">Base layout y design system</h1>
-            <p>
-              Esta vista temporal confirma tokens, tipografia, botones, cards, container,
-              focus visible y reduced motion. No representa contenido comercial final.
-            </p>
+      <section class="hero section" aria-labelledby="hero-title">
+        <div class="container hero__grid">
+          <div class="hero__content flow">
+            <p class="hero__eyebrow">Tecnología para problemas reales</p>
+            <h1 id="hero-title">¿Hay un problema tecnológico que tu empresa necesita resolver?</h1>
+            <p class="hero__subheadline">Lo analizamos, diseñamos una solución y la llevamos a funcionamiento.</p>
+            <p class="hero__description">Desarrollo, automatización, integraciones, cloud, datos, QA y monitoreo para empresas que necesitan avanzar sin ampliar innecesariamente su equipo tecnológico.</p>
+
+            <div class="hero__actions cluster" aria-label="Acciones principales">
+              <a class="button button--primary" href="#contacto-pendiente">Háblanos hoy</a>
+              <a class="button button--secondary" href="#agenda-pendiente">Agenda hoy mismo</a>
+            </div>
+
+            <p class="hero__support">Evaluación inicial sin compromiso · Demo/PoC cuando el caso lo permite.</p>
+
+            <ul class="trust-list" aria-label="Mensajes de confianza">
+              <li>Hablamos directamente.</li>
+              <li>Evaluamos antes de construir.</li>
+              <li>Alcance y costos claros.</li>
+            </ul>
           </div>
 
-          <div class="cluster" aria-label="Botones base">
-            <a class="button button--primary" href="#main-content">Boton primario</a>
-            <a class="button button--secondary" href="#main-content">Boton secundario</a>
-          </div>
-
-          <div class="grid grid--two" aria-label="Cards base">
-            <article class="card flow">
-              <h2>Card base</h2>
-              <p>Superficie, borde, radio y espaciado preparados para modulos posteriores.</p>
-            </article>
-            <article class="card card--interactive flow">
-              <h2>Card interactiva</h2>
-              <p>Variante generica para estados hover cuando el elemento sea accionable.</p>
-            </article>
+          <div class="hero-diagram" aria-hidden="true">
+            <div class="diagram-node">PROBLEMA</div>
+            <svg class="diagram-connector" viewBox="0 0 24 36" focusable="false">
+              <path d="M12 2v28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+              <path d="m6 24 6 8 6-8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <div class="diagram-node diagram-node--accent">API</div>
+            <svg class="diagram-connector" viewBox="0 0 24 36" focusable="false">
+              <path d="M12 2v28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+              <path d="m6 24 6 8 6-8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <div class="diagram-node">AUTOMATIZACIÓN</div>
+            <svg class="diagram-connector" viewBox="0 0 24 36" focusable="false">
+              <path d="M12 2v28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+              <path d="m6 24 6 8 6-8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <div class="diagram-node diagram-node--result">RESULTADO</div>
           </div>
         </div>
       </section>
