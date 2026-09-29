@@ -1,0 +1,106 @@
+.container {
+  width: min(100% - (var(--container-gutter) * 2), var(--container-max));
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: var(--section-space);
+}
+
+.flow > * + * {
+  margin-block-start: var(--flow-space, var(--space-4));
+}
+
+.stack {
+  display: grid;
+  gap: var(--stack-space, var(--space-6));
+}
+
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cluster-gap, var(--space-3));
+  align-items: center;
+}
+
+.grid {
+  display: grid;
+  gap: var(--grid-gap, var(--space-4));
+}
+
+.button {
+  display: inline-flex;
+  min-height: 2.875rem;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  font-family: var(--font-body);
+  font-size: var(--font-size-0);
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+.button--primary {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: #ffffff;
+}
+
+.button--primary:hover {
+  border-color: var(--color-accent-soft);
+  background: var(--color-accent-soft);
+  color: var(--color-bg);
+}
+
+.button--secondary {
+  border-color: var(--color-border);
+  background: color-mix(in srgb, var(--color-surface) 72%, transparent);
+  color: var(--color-text);
+}
+
+.button--secondary:hover {
+  border-color: var(--color-accent-soft);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.card {
+  border: var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  padding: var(--space-6);
+}
+
+.card--interactive {
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.card--interactive:hover {
+  border-color: color-mix(in srgb, var(--color-accent) 55%, var(--color-border));
+  transform: translateY(-2px);
+}
+
+@media (min-width: 48rem) {
+  .button {
+    padding-inline: 1.125rem;
+  }
+
+  .grid--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
