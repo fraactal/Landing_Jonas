@@ -219,3 +219,29 @@ if (processScrolly && "IntersectionObserver" in window) {
     processObserver.observe(step);
   });
 }
+const faqTriggers = document.querySelectorAll("[data-faq-trigger]");
+
+if (faqTriggers.length) {
+  faqTriggers.forEach((trigger) => {
+    const panelId = trigger.getAttribute("aria-controls");
+    const panel = panelId ? document.getElementById(panelId) : null;
+    const icon = trigger.querySelector(".faq__icon");
+
+    if (!panel) {
+      return;
+    }
+
+    trigger.addEventListener("click", () => {
+      const isOpen = trigger.getAttribute("aria-expanded") === "true";
+      const nextOpen = !isOpen;
+
+      trigger.setAttribute("aria-expanded", String(nextOpen));
+      panel.classList.toggle("is-open", nextOpen);
+      panel.setAttribute("aria-hidden", String(!nextOpen));
+
+      if (icon) {
+        icon.textContent = nextOpen ? "−" : "+";
+      }
+    });
+  });
+}
