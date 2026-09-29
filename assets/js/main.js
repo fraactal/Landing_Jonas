@@ -166,3 +166,56 @@ if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemD
     });
   });
 }
+const processScrolly = document.querySelector("[data-process-scrolly]");
+
+if (processScrolly && "IntersectionObserver" in window) {
+  const processSteps = processScrolly.querySelectorAll("[data-process-step]");
+  const processIndicators = processScrolly.querySelectorAll("[data-process-indicator]");
+  const activeNumber = processScrolly.querySelector("[data-process-active-number]");
+  const activeTitle = processScrolly.querySelector("[data-process-active-title]");
+
+  const setActiveProcessStep = (activeStep) => {
+    const stepNumber = activeStep.dataset.processStep;
+    const stepTitle = activeStep.querySelector("h3")?.textContent || "";
+
+    processSteps.forEach((step) => {
+      const isActive = step === activeStep;
+      step.classList.toggle("is-active", isActive);
+      if (isActive) {
+        step.setAttribute("aria-current", "step");
+      } else {
+        step.removeAttribute("aria-current");
+      }
+    });
+
+    processIndicators.forEach((indicator) => {
+      indicator.classList.toggle("is-active", indicator.dataset.processIndicator === stepNumber);
+    });
+
+    if (activeNumber && stepNumber) {
+      activeNumber.textContent = stepNumber.padStart(2, "0");
+    }
+
+    if (activeTitle) {
+      activeTitle.textContent = stepTitle;
+    }
+  };
+
+  const processObserver = new IntersectionObserver((entries) => {
+    const visibleEntry = entries
+      .filter((entry) => entry.isIntersecting)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+    if (visibleEntry) {
+      setActiveProcessStep(visibleEntry.target);
+    }
+  }, {
+    root: null,
+    rootMargin: "-35% 0px -45% 0px",
+    threshold: [0.2, 0.45, 0.7],
+  });
+
+  processSteps.forEach((step) => {
+    processObserver.observe(step);
+  });
+}
