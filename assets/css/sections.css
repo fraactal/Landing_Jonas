@@ -641,6 +641,113 @@
   font-weight: 700;
   line-height: 1;
 }
+.cases {
+  padding-block: clamp(4.5rem, 10vw, 8rem);
+}
+
+.cases__inner {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.cases__heading {
+  max-width: 48rem;
+}
+
+.cases__eyebrow {
+  margin: 0;
+  color: var(--color-accent-soft);
+  font-size: var(--font-size-0);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cases__heading p:not(.cases__eyebrow) {
+  max-width: 42rem;
+  font-size: var(--font-size-1);
+}
+
+.cases__grid {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.case-card {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  min-height: 18rem;
+  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.case-card:hover {
+  border-color: color-mix(in srgb, var(--color-accent) 48%, var(--color-border));
+  background: var(--color-surface);
+  transform: translateY(-2px);
+}
+
+.case-card__type {
+  margin: 0;
+  color: var(--color-accent-soft);
+  font-size: var(--font-size-0);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.case-card h3 {
+  margin: 0;
+  font-size: var(--font-size-3);
+  line-height: var(--line-height-heading);
+}
+
+.case-card p:not(.case-card__type):not(.case-card__categories) {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--font-size-1);
+}
+
+.case-card__categories {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--font-size-0);
+  font-weight: 600;
+}
+
+.case-flow {
+  margin-block: var(--space-2);
+}
+
+.case-flow__nodes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.case-flow__nodes span {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border: var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-bg) 56%, var(--color-surface));
+  color: var(--color-text);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-0);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: var(--space-2) var(--space-3);
+}
+
+.case-flow__nodes span + span::before {
+  content: "→";
+  margin-inline-end: var(--space-3);
+  color: var(--color-accent-soft);
+}
 @media (min-width: 48rem) {
   .nav-toggle {
     display: none;
@@ -675,6 +782,10 @@
 
   .poc-flow {
     justify-content: flex-end;
+  }
+
+  .cases__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .hero-diagram {
     padding: var(--space-8);
@@ -804,12 +915,14 @@
   .problem-option,
   .problem-detail,
   .service-card,
+  .case-card,
   .process-step__card,
   .process__progress-item {
     transition: none;
   }
 
   .service-card:hover,
+  .case-card:hover,
   .process-step__card,
   .process__progress-item.is-active {
     transform: none;
