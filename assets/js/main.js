@@ -102,49 +102,60 @@ const problemDetailTitle = document.querySelector("[data-problem-detail-title]")
 const problemDetailCopy = document.querySelector("[data-problem-detail-copy]");
 const problemDetailCta = document.querySelector("[data-problem-detail-cta]");
 const problemDetail = document.querySelector(".problem-detail");
+const whatsappBaseUrl = "https://wa.me/56931367372?text=";
+const fallbackWhatsappMessage = "Hola Jonathan, vi tu sitio y quiero conversar sobre un problema tecnológico en mi empresa.";
+const buildWhatsappUrl = (message) => `${whatsappBaseUrl}${encodeURIComponent(message || fallbackWhatsappMessage)}`;
 
 if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemDetailCta && problemDetail) {
   const problemContent = {
     automation: {
       title: "Automatizar un proceso",
       description: "Podemos ayudarte a identificar tareas repetitivas, diseñar el flujo y evaluar qué partes pueden automatizarse sin complicar innecesariamente la operación.",
+      whatsappMessage: "Hola Jonathan, quiero conversar sobre automatizar un proceso en mi empresa.",
     },
     app: {
       title: "Crear una aplicación",
       description: "Podemos ayudarte a definir, diseñar y construir una aplicación, sistema interno, API o MVP que resuelva una necesidad concreta sin sobredimensionar el proyecto.",
+      whatsappMessage: "Hola Jonathan, quiero conversar sobre crear una aplicación en mi empresa.",
     },
     integration: {
       title: "Conectar sistemas",
       description: "Podemos ayudarte a integrar plataformas, APIs, bases de datos o servicios que hoy funcionan separados para que la información fluya con menos trabajo manual.",
+      whatsappMessage: "Hola Jonathan, quiero conversar sobre conectar sistemas en mi empresa.",
     },
     data: {
       title: "Trabajar con mis datos",
       description: "Podemos ayudarte a consolidar, transformar y visualizar datos mediante reportes, dashboards o flujos que apoyen mejores decisiones del negocio.",
+      whatsappMessage: "Hola Jonathan, quiero conversar sobre trabajar con mis datos en mi empresa.",
     },
     infrastructure: {
       title: "Mejorar infraestructura",
       description: "Podemos ayudarte a ordenar despliegues, cloud, Docker, CI/CD y automatización para que tu infraestructura sea más confiable y fácil de operar.",
+      whatsappMessage: "Hola Jonathan, quiero conversar sobre mejorar infraestructura en mi empresa.",
     },
     quality: {
       title: "Mejorar calidad",
       description: "Podemos ayudarte a reducir errores con pruebas funcionales, automatización, regresión y controles que den más confianza antes de publicar cambios.",
+      whatsappMessage: "Hola Jonathan, quiero conversar sobre mejorar calidad en mi empresa.",
     },
     monitoring: {
       title: "Mejorar monitoreo / visibilidad",
       description: "Podemos ayudarte a implementar métricas, logs, alertas y dashboards para entender qué está ocurriendo en tus sistemas y operación.",
+      whatsappMessage: "Hola Jonathan, quiero conversar sobre mejorar monitoreo o visibilidad en mi empresa.",
     },
     unsure: {
       title: "No estoy seguro",
       description: "No necesitas saber la solución técnica. Podemos empezar entendiendo qué ocurre, qué necesitas lograr y qué alternativas tienen sentido para tu caso.",
+      whatsappMessage: "Hola Jonathan, tengo un problema tecnológico en mi empresa pero todavía no tengo claro qué tipo de solución necesito.",
     },
   };
 
   const setSelectedProblem = (selectedButton) => {
-    const content = problemContent[selectedButton.dataset.problemOption];
-
-    if (!content) {
-      return;
-    }
+    const content = problemContent[selectedButton.dataset.problemOption] || {
+      title: selectedButton.textContent.trim() || "Cuéntame tu caso",
+      description: "Podemos empezar entendiendo qué ocurre y qué alternativa tiene sentido para tu caso.",
+      whatsappMessage: fallbackWhatsappMessage,
+    };
 
     problemOptions.forEach((button) => {
       const isSelected = button === selectedButton;
@@ -156,6 +167,7 @@ if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemD
     window.setTimeout(() => {
       problemDetailTitle.textContent = content.title;
       problemDetailCopy.textContent = content.description;
+      problemDetailCta.href = buildWhatsappUrl(content.whatsappMessage);
       problemDetailCta.hidden = false;
       problemDetail.classList.remove("is-changing");
     }, 120);
