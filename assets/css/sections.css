@@ -1228,3 +1228,126 @@
     transform: none;
   }
 }
+
+.legal-page {
+  min-height: 100vh;
+}
+
+.legal-header {
+  border-block-end: var(--border-subtle);
+  background: color-mix(in srgb, var(--color-bg) 94%, var(--color-surface));
+}
+
+.legal-header__inner {
+  display: flex;
+  min-height: 4.25rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.legal-header__back {
+  color: var(--color-muted);
+  font-size: var(--font-size-0);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.legal-header__back:hover {
+  color: var(--color-accent-soft);
+}
+
+.legal-main {
+  padding-block: clamp(3.5rem, 8vw, 6rem);
+}
+
+.legal-document {
+  max-width: 52rem;
+}
+
+.legal-document__eyebrow {
+  margin: 0 0 var(--space-3);
+  color: var(--color-accent-soft);
+  font-size: var(--font-size-0);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.legal-document h1 {
+  margin: 0;
+}
+
+.legal-document__updated {
+  margin-block-start: var(--space-4);
+  color: var(--color-muted);
+  font-size: var(--font-size-0);
+}
+
+.legal-document__body {
+  display: grid;
+  gap: var(--space-8);
+  margin-block-start: var(--space-10);
+}
+
+.legal-document__body section {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.legal-document__body h2 {
+  font-size: var(--font-size-2);
+}
+
+.legal-document__body p {
+  max-width: 72ch;
+}
+
+.legal-document code {
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 0.95em;
+}
+
+.legal-note {
+  border: var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-surface) 78%, transparent);
+  padding: var(--space-5);
+}
+
+.legal-footer {
+  border-block-start: var(--border-subtle);
+  padding-block: var(--space-6);
+}
+
+.legal-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-5);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.legal-footer p,
+.legal-footer a {
+  color: var(--color-muted);
+  font-size: var(--font-size-0);
+}
+
+.site-footer__group a {
+  color: var(--color-muted);
+  font-size: var(--font-size-0);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.site-footer__group a:hover {
+  color: var(--color-accent-soft);
+}
+
+.site-footer__group a + a::before {
+  content: "·";
+  margin-inline-end: var(--space-3);
+  color: var(--color-border);
+}
