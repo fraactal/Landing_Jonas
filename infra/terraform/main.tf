@@ -1,0 +1,100 @@
+provider "aws" {
+  region = var.aws_region
+}
+
+locals {
+  common_tags = {
+    Project     = "jonathanvaldes.com"
+    Environment = var.environment
+    ManagedBy   = "terraform"
+    Module      = "lead-capture"
+  }
+}
+
+resource "aws_dynamodb_table" "leads" {
+  name         = var.leads_table_name
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "leadId"
+
+  attribute {
+    name = "leadId"
+    type = "S"
+  }
+
+  tags = local.common_tags
+}
+
+data "aws_iam_policy_document" "lambda_assume_role" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
+    }
+
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+resource "aws_iam_role" "lead_api" {
+  name               = "${var.lambda_function_name}-role"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+
+  tags = local.common_tags
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
+  role       = aws_iam_role.lead_api.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+data "aws_iam_policy_document" "lead_table_write" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "dynamodb:PutItem",
+    ]
+
+    resources = [aws_dynamodb_table.leads.arn]
+  }
+}
+
+resource "aws_iam_role_policy" "lead_table_write" {
+  name   = "${var.lambda_function_name}-dynamodb-put-item"
+  role   = aws_iam_role.lead_api.id
+  policy = data.aws_iam_policy_document.lead_table_write.json
+}
+
+resource "aws_lambda_function" "lead_api" {
+  function_name    = var.lambda_function_name
+  description      = "Receives and persists jonathanvaldes.com lead form submissions."
+  role             = aws_iam_role.lead_api.arn
+  runtime          = var.lambda_runtime
+  handler          = "handler.lambda_handler"
+  filename         = var.lambda_package_path
+  source_code_hash = filebase64sha256(var.lambda_package_path)
+
+  environment {
+    variables = {
+      LEADS_TABLE_NAME = aws_dynamodb_table.leads.name
+      ALLOWED_ORIGINS  = join(",", var.allowed_origins)
+      ENVIRONMENT      = var.environment
+    }
+  }
+
+  tags = local.common_tags
+}
+
+resource "aws_lambda_function_url" "lead_api" {
+  function_name      = aws_lambda_function.lead_api.function_name
+  authorization_type = "NONE"
+
+  cors {
+    allow_headers = ["content-type"]
+    allow_methods = ["POST"]
+    allow_origins = var.allowed_origins
+    max_age       = 300
+  }
+}

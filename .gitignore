@@ -13,6 +13,8 @@ crash.log
 crash.*.log
 
 # Dependencies and build outputs
+__pycache__/
+*.py[cod]
 node_modules/
 dist/
 build/
