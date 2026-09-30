@@ -24,6 +24,14 @@ resource "aws_dynamodb_table" "leads" {
   tags = local.common_tags
 }
 
+resource "aws_ses_domain_identity" "lead_notifications" {
+  domain = var.ses_domain_identity
+}
+
+resource "aws_ses_domain_dkim" "lead_notifications" {
+  domain = aws_ses_domain_identity.lead_notifications.domain
+}
+
 data "aws_iam_policy_document" "lambda_assume_role" {
   statement {
     effect = "Allow"
@@ -67,6 +75,24 @@ resource "aws_iam_role_policy" "lead_table_write" {
   policy = data.aws_iam_policy_document.lead_table_write.json
 }
 
+data "aws_iam_policy_document" "lead_notification_send" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "ses:SendEmail",
+    ]
+
+    resources = [aws_ses_domain_identity.lead_notifications.arn]
+  }
+}
+
+resource "aws_iam_role_policy" "lead_notification_send" {
+  name   = "${var.lambda_function_name}-ses-send-email"
+  role   = aws_iam_role.lead_api.id
+  policy = data.aws_iam_policy_document.lead_notification_send.json
+}
+
 resource "aws_lambda_function" "lead_api" {
   function_name    = var.lambda_function_name
   description      = "Receives and persists jonathanvaldes.com lead form submissions."
@@ -78,9 +104,11 @@ resource "aws_lambda_function" "lead_api" {
 
   environment {
     variables = {
-      LEADS_TABLE_NAME = aws_dynamodb_table.leads.name
-      ALLOWED_ORIGINS  = join(",", var.allowed_origins)
-      ENVIRONMENT      = var.environment
+      LEADS_TABLE_NAME       = aws_dynamodb_table.leads.name
+      LEAD_NOTIFICATION_TO   = var.lead_notification_to
+      LEAD_NOTIFICATION_FROM = var.lead_notification_from
+      ALLOWED_ORIGINS        = join(",", var.allowed_origins)
+      ENVIRONMENT            = var.environment
     }
   }
 

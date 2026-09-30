@@ -39,3 +39,21 @@ variable "allowed_origins" {
   type        = list(string)
   default     = ["https://jonathanvaldes.com"]
 }
+
+variable "ses_domain_identity" {
+  description = "Domain identity used by SES for lead notifications. DNS records must be published separately."
+  type        = string
+  default     = "jonathanvaldes.com"
+}
+
+variable "lead_notification_to" {
+  description = "Operational destination for internal lead notifications. Do not expose this in frontend or public API responses."
+  type        = string
+  default     = "jonathan.valdes.o@gmail.com"
+}
+
+variable "lead_notification_from" {
+  description = "SES sender address for lead notifications. Must belong to a verified SES identity."
+  type        = string
+  default     = "notificaciones@jonathanvaldes.com"
+}

@@ -1,4 +1,5 @@
 import base64
+import html
 import json
 import os
 import uuid
@@ -8,7 +9,9 @@ from typing import Any
 from validation import MAX_PAYLOAD_BYTES, ValidationError, validate_lead_payload
 
 DEFAULT_ALLOWED_ORIGINS = "https://jonathanvaldes.com"
+EMAIL_SUBJECT = "Nuevo contacto desde JonathanValdes.com"
 _table = None
+_ses_client = None
 
 
 def _allowed_origins() -> set[str]:
@@ -31,6 +34,7 @@ def _origin_from(event: dict[str, Any]) -> str | None:
 def _has_json_content_type(event: dict[str, Any]) -> bool:
     content_type = _header_value(event, "content-type") or ""
     return "application/json" in content_type.lower()
+
 
 def _response(status_code: int, body: dict[str, Any] | None = None, *, origin: str | None = None) -> dict[str, Any]:
     headers = {
@@ -74,6 +78,14 @@ def _table_name() -> str:
     return table_name
 
 
+def _notification_config() -> tuple[str, str]:
+    to_address = os.environ.get("LEAD_NOTIFICATION_TO")
+    from_address = os.environ.get("LEAD_NOTIFICATION_FROM")
+    if not to_address or not from_address:
+        raise RuntimeError("Lead notification configuration is incomplete")
+    return to_address, from_address
+
+
 def _get_table():
     global _table
     if _table is None:
@@ -83,12 +95,85 @@ def _get_table():
     return _table
 
 
+def _get_ses_client():
+    global _ses_client
+    if _ses_client is None:
+        import boto3
+
+        _ses_client = boto3.client("ses")
+    return _ses_client
+
+
 def _utc_now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
 def _request_id(context: Any) -> str:
     return getattr(context, "aws_request_id", "unknown")
+
+
+def _display_value(value: Any) -> str:
+    return str(value).strip() if value else "-"
+
+
+def _build_notification_email(lead: dict[str, Any]) -> dict[str, str]:
+    lines = [
+        EMAIL_SUBJECT,
+        "",
+        f"Lead ID: {lead['leadId']}",
+        f"Fecha/hora UTC: {lead['createdAt']}",
+        f"Nombre: {lead['name']}",
+        f"Empresa: {_display_value(lead.get('company'))}",
+        f"Email: {lead['email']}",
+        f"Teléfono: {_display_value(lead.get('phone'))}",
+        f"Necesidad: {lead['problemType']}",
+        f"Origen: {lead['sourceContext']}",
+        "",
+        "Mensaje:",
+        lead["message"],
+    ]
+
+    html_fields = [
+        ("Lead ID", lead["leadId"]),
+        ("Fecha/hora UTC", lead["createdAt"]),
+        ("Nombre", lead["name"]),
+        ("Empresa", _display_value(lead.get("company"))),
+        ("Email", lead["email"]),
+        ("Teléfono", _display_value(lead.get("phone"))),
+        ("Necesidad", lead["problemType"]),
+        ("Origen", lead["sourceContext"]),
+    ]
+    html_rows = "\n".join(
+        f"<p><strong>{html.escape(label)}:</strong> {html.escape(str(value))}</p>"
+        for label, value in html_fields
+    )
+    html_body = (
+        "<h1>Nuevo contacto desde JonathanValdes.com</h1>\n"
+        f"{html_rows}\n"
+        "<h2>Mensaje</h2>\n"
+        f"<p>{html.escape(lead['message']).replace(chr(10), '<br>')}</p>"
+    )
+
+    return {
+        "text": "\n".join(lines),
+        "html": html_body,
+    }
+
+
+def _send_lead_notification(lead: dict[str, Any]) -> None:
+    to_address, from_address = _notification_config()
+    body = _build_notification_email(lead)
+    _get_ses_client().send_email(
+        Source=from_address,
+        Destination={"ToAddresses": [to_address]},
+        Message={
+            "Subject": {"Data": EMAIL_SUBJECT, "Charset": "UTF-8"},
+            "Body": {
+                "Text": {"Data": body["text"], "Charset": "UTF-8"},
+                "Html": {"Data": body["html"], "Charset": "UTF-8"},
+            },
+        },
+    )
 
 
 def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
@@ -142,4 +227,11 @@ def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
         return _response(500, {"ok": False, "error": "internal_error"}, origin=origin)
 
     print(f"lead_created request_id={request_id} lead_id={lead_id}")
+
+    try:
+        _send_lead_notification(item)
+        print(f"lead_notification_sent request_id={request_id} lead_id={lead_id}")
+    except Exception:
+        print(f"lead_notification_failed request_id={request_id} lead_id={lead_id}")
+
     return _response(201, {"ok": True, "leadId": lead_id, "status": "NEW"}, origin=origin)
