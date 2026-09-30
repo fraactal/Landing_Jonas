@@ -105,8 +105,22 @@ const problemDetail = document.querySelector(".problem-detail");
 const whatsappBaseUrl = "https://wa.me/56931367372?text=";
 const fallbackWhatsappMessage = "Hola Jonathan, vi tu sitio y quiero conversar sobre un problema tecnológico en mi empresa.";
 const buildWhatsappUrl = (message) => `${whatsappBaseUrl}${encodeURIComponent(message || fallbackWhatsappMessage)}`;
+const contactForm = document.querySelector("[data-contact-form]");
+const contactProblemType = document.querySelector("[data-contact-field=\"problemType\"]");
+const contactSourceContext = document.querySelector("[data-contact-source-context]");
 
 if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemDetailCta && problemDetail) {
+  const problemOptionToFormValue = {
+    automation: "Automatizar un proceso",
+    app: "Crear una aplicación",
+    integration: "Conectar sistemas",
+    data: "Trabajar con mis datos",
+    infrastructure: "Mejorar infraestructura",
+    quality: "Mejorar calidad",
+    monitoring: "Mejorar monitoreo / visibilidad",
+    unsure: "No estoy seguro",
+  };
+
   const problemContent = {
     automation: {
       title: "Automatizar un proceso",
@@ -168,6 +182,12 @@ if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemD
       problemDetailTitle.textContent = content.title;
       problemDetailCopy.textContent = content.description;
       problemDetailCta.href = buildWhatsappUrl(content.whatsappMessage);
+      if (contactProblemType && problemOptionToFormValue[selectedButton.dataset.problemOption]) {
+        contactProblemType.value = problemOptionToFormValue[selectedButton.dataset.problemOption];
+      }
+      if (contactSourceContext && problemOptionToFormValue[selectedButton.dataset.problemOption]) {
+        contactSourceContext.value = "problem-selector";
+      }
       problemDetailCta.hidden = false;
       problemDetail.classList.remove("is-changing");
     }, 120);
@@ -264,5 +284,150 @@ if (faqTriggers.length) {
         icon.textContent = nextOpen ? "−" : "+";
       }
     });
+  });
+}
+
+const contactStatus = document.querySelector("[data-contact-status]");
+const contactSubmit = document.querySelector("[data-contact-submit]");
+
+if (contactForm) {
+  const fields = {
+    name: contactForm.querySelector("[data-contact-field=\"name\"]"),
+    email: contactForm.querySelector("[data-contact-field=\"email\"]"),
+    problemType: contactForm.querySelector("[data-contact-field=\"problemType\"]"),
+    message: contactForm.querySelector("[data-contact-field=\"message\"]"),
+    privacyAccepted: contactForm.querySelector("[data-contact-field=\"privacyAccepted\"]"),
+    website: contactForm.querySelector("[data-contact-field=\"website\"]"),
+  };
+
+  const allowedProblemTypes = new Set([
+    "Automatizar un proceso",
+    "Crear una aplicación",
+    "Conectar sistemas",
+    "Trabajar con mis datos",
+    "Mejorar infraestructura",
+    "Mejorar calidad",
+    "Mejorar monitoreo / visibilidad",
+    "No estoy seguro",
+    "Otro",
+  ]);
+
+  const messages = {
+    name: "Ingresa tu nombre.",
+    email: "Ingresa un email válido.",
+    problemType: "Selecciona qué necesitas resolver.",
+    message: "Cuéntame brevemente tu problema.",
+    privacyAccepted: "Debes aceptar la Política de Privacidad para continuar.",
+  };
+
+  const setFieldError = (fieldName, message = "") => {
+    const error = contactForm.querySelector(`[data-contact-error="${fieldName}"]`);
+    const field = fields[fieldName];
+    const wrapper = field?.closest(".contact-field");
+
+    if (error) {
+      error.textContent = message;
+    }
+
+    if (field) {
+      field.toggleAttribute("aria-invalid", Boolean(message));
+    }
+
+    if (wrapper) {
+      wrapper.classList.toggle("is-invalid", Boolean(message));
+    }
+  };
+
+  const validateContactForm = () => {
+    let firstInvalidField;
+
+    Object.keys(messages).forEach((fieldName) => setFieldError(fieldName));
+
+    const name = fields.name?.value.trim() || "";
+    const email = fields.email?.value.trim() || "";
+    const problemType = fields.problemType?.value || "";
+    const message = fields.message?.value.trim() || "";
+    const website = fields.website?.value.trim() || "";
+
+    if (fields.name) {
+      fields.name.value = name;
+    }
+    if (fields.email) {
+      fields.email.value = email;
+    }
+    if (fields.message) {
+      fields.message.value = message;
+    }
+
+    const markInvalid = (fieldName) => {
+      setFieldError(fieldName, messages[fieldName]);
+      if (!firstInvalidField) {
+        firstInvalidField = fields[fieldName];
+      }
+    };
+
+    if (!name) {
+      markInvalid("name");
+    }
+
+    if (!email || !fields.email.checkValidity()) {
+      markInvalid("email");
+    }
+
+    if (!problemType || !allowedProblemTypes.has(problemType)) {
+      markInvalid("problemType");
+    }
+
+    if (!message) {
+      markInvalid("message");
+    }
+
+    if (!fields.privacyAccepted?.checked) {
+      markInvalid("privacyAccepted");
+    }
+
+    if (website) {
+      return { isValid: false, firstInvalidField: null };
+    }
+
+    return { isValid: !firstInvalidField, firstInvalidField };
+  };
+
+  contactForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    if (contactStatus) {
+      contactStatus.textContent = "";
+    }
+
+    const { isValid, firstInvalidField } = validateContactForm();
+
+    if (!isValid) {
+      firstInvalidField?.focus();
+      return;
+    }
+
+    if (contactSubmit) {
+      contactSubmit.textContent = "Enviar mi caso";
+      contactSubmit.disabled = false;
+    }
+
+    if (contactStatus) {
+      contactStatus.innerHTML = `El formulario estará disponible próximamente. Mientras tanto puedes contactarme por <a href="${buildWhatsappUrl("Hola Jonathan, vi tu sitio y quiero conversar sobre una solución tecnológica para mi empresa.")}" target="_blank" rel="noopener noreferrer">WhatsApp</a>.`;
+    }
+  });
+
+  contactForm.addEventListener("input", (event) => {
+    const fieldName = event.target?.dataset?.contactField;
+    if (fieldName && messages[fieldName]) {
+      setFieldError(fieldName);
+    }
+  });
+
+  contactForm.addEventListener("change", (event) => {
+    const fieldName = event.target?.dataset?.contactField;
+    if (fieldName && messages[fieldName]) {
+      setFieldError(fieldName);
+    }
   });
 }
