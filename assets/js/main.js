@@ -1,3 +1,4 @@
+document.documentElement.classList.add("js");
 const header = document.querySelector("[data-site-header]");
 const toggle = document.querySelector("[data-nav-toggle]");
 const nav = document.querySelector("[data-site-nav]");
@@ -229,6 +230,14 @@ if (faqTriggers.length) {
 
     if (!panel) {
       return;
+    }
+
+    trigger.setAttribute("aria-expanded", "false");
+    panel.classList.remove("is-open");
+    panel.setAttribute("aria-hidden", "true");
+
+    if (icon) {
+      icon.textContent = "+";
     }
 
     trigger.addEventListener("click", () => {
