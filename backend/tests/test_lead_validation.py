@@ -2,6 +2,9 @@ import unittest
 from pathlib import Path
 import sys
 
+for module_name in ("handler", "validation"):
+    sys.modules.pop(module_name, None)
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "lead_api"))
 
 from validation import ValidationError, validate_lead_payload

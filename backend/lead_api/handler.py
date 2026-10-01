@@ -189,8 +189,8 @@ def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
         return _response(405, {"ok": False, "error": "method_not_allowed"}, origin=origin)
 
     if not _has_json_content_type(event):
-        print(f"lead_validation_failed request_id={request_id}")
-        return _response(400, {"ok": False, "error": "invalid_request"}, origin=origin)
+        print(f"lead_unsupported_media_type request_id={request_id}")
+        return _response(415, {"ok": False, "error": "unsupported_media_type"}, origin=origin)
 
     try:
         raw_body = _body_bytes(event)

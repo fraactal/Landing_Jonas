@@ -42,3 +42,17 @@ desktop.ini
 .aws/
 credentials
 *.local
+
+# Local OAuth / credentials artifacts
+client_secret*.json
+credentials*.json
+google-oauth*.json
+*refresh-token*.json
+*.pem
+*.key
+
+# Lambda packages and local Python/test caches
+build/*.zip
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/

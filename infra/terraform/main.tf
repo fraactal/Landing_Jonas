@@ -45,6 +45,20 @@ data "aws_iam_policy_document" "lambda_assume_role" {
   }
 }
 
+resource "aws_cloudwatch_log_group" "lead_api" {
+  name              = "/aws/lambda/${var.lambda_function_name}"
+  retention_in_days = var.lambda_log_retention_days
+
+  tags = local.common_tags
+}
+
+resource "aws_cloudwatch_log_group" "booking_api" {
+  name              = "/aws/lambda/${var.booking_lambda_function_name}"
+  retention_in_days = var.lambda_log_retention_days
+
+  tags = local.common_tags
+}
+
 resource "aws_iam_role" "lead_api" {
   name               = "${var.lambda_function_name}-role"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
@@ -52,9 +66,23 @@ resource "aws_iam_role" "lead_api" {
   tags = local.common_tags
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
-  role       = aws_iam_role.lead_api.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+data "aws_iam_policy_document" "lead_api_logs" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+
+    resources = ["${aws_cloudwatch_log_group.lead_api.arn}:*"]
+  }
+}
+
+resource "aws_iam_role_policy" "lead_api_logs" {
+  name   = "${var.lambda_function_name}-logs"
+  role   = aws_iam_role.lead_api.id
+  policy = data.aws_iam_policy_document.lead_api_logs.json
 }
 
 data "aws_iam_policy_document" "lead_table_write" {
@@ -94,13 +122,14 @@ resource "aws_iam_role_policy" "lead_notification_send" {
 }
 
 resource "aws_lambda_function" "lead_api" {
-  function_name    = var.lambda_function_name
-  description      = "Receives and persists jonathanvaldes.com lead form submissions."
-  role             = aws_iam_role.lead_api.arn
-  runtime          = var.lambda_runtime
-  handler          = "handler.lambda_handler"
-  filename         = var.lambda_package_path
-  source_code_hash = filebase64sha256(var.lambda_package_path)
+  function_name                  = var.lambda_function_name
+  description                    = "Receives and persists jonathanvaldes.com lead form submissions."
+  role                           = aws_iam_role.lead_api.arn
+  runtime                        = var.lambda_runtime
+  handler                        = "handler.lambda_handler"
+  filename                       = var.lambda_package_path
+  source_code_hash               = filebase64sha256(var.lambda_package_path)
+  reserved_concurrent_executions = var.lead_reserved_concurrent_executions
 
   environment {
     variables = {
@@ -111,6 +140,11 @@ resource "aws_lambda_function" "lead_api" {
       ENVIRONMENT            = var.environment
     }
   }
+
+  depends_on = [
+    aws_cloudwatch_log_group.lead_api,
+    aws_iam_role_policy.lead_api_logs,
+  ]
 
   tags = local.common_tags
 }
@@ -125,6 +159,15 @@ resource "aws_lambda_function_url" "lead_api" {
     allow_origins = var.allowed_origins
     max_age       = 300
   }
+  lifecycle {
+    precondition {
+      condition = var.environment != "production" || alltrue([
+        for origin in var.allowed_origins :
+        !can(regex("^https?://(localhost|127\\.0\\.0\\.1|\\[::1\\])", origin))
+      ])
+      error_message = "production allowed_origins must not include localhost or loopback origins."
+    }
+  }
 }
 
 resource "aws_iam_role" "booking_api" {
@@ -134,9 +177,23 @@ resource "aws_iam_role" "booking_api" {
   tags = local.common_tags
 }
 
-resource "aws_iam_role_policy_attachment" "booking_lambda_basic_execution" {
-  role       = aws_iam_role.booking_api.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+data "aws_iam_policy_document" "booking_api_logs" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+
+    resources = ["${aws_cloudwatch_log_group.booking_api.arn}:*"]
+  }
+}
+
+resource "aws_iam_role_policy" "booking_api_logs" {
+  name   = "${var.booking_lambda_function_name}-logs"
+  role   = aws_iam_role.booking_api.id
+  policy = data.aws_iam_policy_document.booking_api_logs.json
 }
 
 data "aws_iam_policy_document" "booking_google_secret_read" {
@@ -158,13 +215,14 @@ resource "aws_iam_role_policy" "booking_google_secret_read" {
 }
 
 resource "aws_lambda_function" "booking_api" {
-  function_name    = var.booking_lambda_function_name
-  description      = "Provides jonathanvaldes.com booking availability and Google Calendar event creation."
-  role             = aws_iam_role.booking_api.arn
-  runtime          = var.lambda_runtime
-  handler          = "handler.lambda_handler"
-  filename         = var.booking_lambda_package_path
-  source_code_hash = filebase64sha256(var.booking_lambda_package_path)
+  function_name                  = var.booking_lambda_function_name
+  description                    = "Provides jonathanvaldes.com booking availability and Google Calendar event creation."
+  role                           = aws_iam_role.booking_api.arn
+  runtime                        = var.lambda_runtime
+  handler                        = "handler.lambda_handler"
+  filename                       = var.booking_lambda_package_path
+  source_code_hash               = filebase64sha256(var.booking_lambda_package_path)
+  reserved_concurrent_executions = var.booking_reserved_concurrent_executions
 
   environment {
     variables = {
@@ -173,6 +231,11 @@ resource "aws_lambda_function" "booking_api" {
       ENVIRONMENT               = var.environment
     }
   }
+
+  depends_on = [
+    aws_cloudwatch_log_group.booking_api,
+    aws_iam_role_policy.booking_api_logs,
+  ]
 
   tags = local.common_tags
 }
@@ -186,5 +249,14 @@ resource "aws_lambda_function_url" "booking_api" {
     allow_methods = ["POST"]
     allow_origins = var.allowed_origins
     max_age       = 300
+  }
+  lifecycle {
+    precondition {
+      condition = var.environment != "production" || alltrue([
+        for origin in var.allowed_origins :
+        !can(regex("^https?://(localhost|127\\.0\\.0\\.1|\\[::1\\])", origin))
+      ])
+      error_message = "production allowed_origins must not include localhost or loopback origins."
+    }
   }
 }

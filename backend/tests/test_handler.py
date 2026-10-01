@@ -4,6 +4,9 @@ from pathlib import Path
 import sys
 from unittest.mock import patch
 
+for module_name in ("handler", "validation"):
+    sys.modules.pop(module_name, None)
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "lead_api"))
 
 import handler
@@ -40,10 +43,10 @@ class FakeSesClient:
         return {"MessageId": "message-123"}
 
 
-def event_for(payload, method="POST"):
+def event_for(payload, method="POST", content_type="application/json"):
     return {
         "requestContext": {"http": {"method": method}},
-        "headers": {"origin": "https://jonathanvaldes.com", "content-type": "application/json"},
+        "headers": {"origin": "https://jonathanvaldes.com", "content-type": content_type},
         "body": json.dumps(payload),
         "isBase64Encoded": False,
     }
@@ -97,12 +100,19 @@ class HandlerTests(unittest.TestCase):
         self.assertEqual(len(ses.messages), 1)
         self.assertEqual(ses.messages[0]["Source"], "notificaciones@jonathanvaldes.com")
         self.assertEqual(ses.messages[0]["Destination"], {"ToAddresses": ["jonathan.valdes.o@gmail.com"]})
+        self.assertEqual(ses.messages[0]["Message"]["Subject"]["Data"], handler.EMAIL_SUBJECT)
 
     def test_method_not_allowed(self):
         response = handler.lambda_handler(event_for(VALID_PAYLOAD, method="GET"), Context())
 
         self.assertEqual(response["statusCode"], 405)
         self.assertEqual(json.loads(response["body"])["error"], "method_not_allowed")
+
+    def test_wrong_content_type_returns_415(self):
+        response = handler.lambda_handler(event_for(VALID_PAYLOAD, content_type="text/plain"), Context())
+
+        self.assertEqual(response["statusCode"], 415)
+        self.assertEqual(json.loads(response["body"])["error"], "unsupported_media_type")
 
     def test_oversized_payload_returns_413(self):
         response = handler.lambda_handler(
@@ -116,6 +126,33 @@ class HandlerTests(unittest.TestCase):
         )
 
         self.assertEqual(response["statusCode"], 413)
+
+    def test_unknown_field_returns_400_and_does_not_persist_or_send(self):
+        table = FakeTable()
+        ses = FakeSesClient()
+        handler._table = table
+        handler._ses_client = ses
+        payload = dict(VALID_PAYLOAD, admin=True)
+
+        response = handler.lambda_handler(event_for(payload), Context())
+
+        self.assertEqual(response["statusCode"], 400)
+        self.assertEqual(len(table.items), 0)
+        self.assertEqual(len(ses.messages), 0)
+
+    def test_honeypot_returns_400_and_does_not_persist_or_send(self):
+        table = FakeTable()
+        ses = FakeSesClient()
+        handler._table = table
+        handler._ses_client = ses
+        payload = dict(VALID_PAYLOAD, website="bot")
+
+        response = handler.lambda_handler(event_for(payload), Context())
+
+        self.assertEqual(response["statusCode"], 400)
+        self.assertEqual(json.loads(response["body"])["error"], "invalid_request")
+        self.assertEqual(len(table.items), 0)
+        self.assertEqual(len(ses.messages), 0)
 
     def test_invalid_payload_returns_400(self):
         payload = dict(VALID_PAYLOAD, privacyAccepted=False)
@@ -173,7 +210,9 @@ class HandlerTests(unittest.TestCase):
             "createdAt": "2026-09-30T15:30:00Z",
             "status": "NEW",
             "name": "<b>Ana</b>",
-            "email": "ana@example.com",
+            "company": "<i>Empresa</i>",
+            "email": "ana+<tag>@example.com",
+            "phone": "+56 <script>9</script>",
             "problemType": "Crear una aplicación",
             "message": "Necesito <script>alert(1)</script>\nconectar sistemas.",
             "privacyAccepted": True,
@@ -184,13 +223,16 @@ class HandlerTests(unittest.TestCase):
         body = handler._build_notification_email(lead)
 
         self.assertIn("Lead ID: lead-123", body["text"])
-        self.assertIn("Empresa: -", body["text"])
-        self.assertIn("Teléfono: -", body["text"])
+        self.assertIn("Empresa: <i>Empresa</i>", body["text"])
+        self.assertIn("Teléfono: +56 <script>9</script>", body["text"])
         self.assertIn("Necesidad: Crear una aplicación", body["text"])
         self.assertIn("Origen: problem-selector", body["text"])
         self.assertNotIn("website", body["text"])
         self.assertNotIn("honeypot", body["text"].lower())
         self.assertIn("&lt;b&gt;Ana&lt;/b&gt;", body["html"])
+        self.assertIn("&lt;i&gt;Empresa&lt;/i&gt;", body["html"])
+        self.assertIn("ana+&lt;tag&gt;@example.com", body["html"])
+        self.assertIn("+56 &lt;script&gt;9&lt;/script&gt;", body["html"])
         self.assertIn("&lt;script&gt;alert(1)&lt;/script&gt;", body["html"])
         self.assertNotIn("<script>", body["html"])
 

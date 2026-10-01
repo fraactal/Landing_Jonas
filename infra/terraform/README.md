@@ -131,3 +131,13 @@ allowed_origins = [
 ```
 
 No usar wildcard en producción.
+## Hardening M22
+
+- Las Function URLs son públicas; CORS no es autenticación ni mitigación contra bots server-to-server.
+- `allowed_origins` no permite wildcard y en `production` no debe incluir localhost ni loopback.
+- Las Lambdas tienen log groups explícitos con retención configurable, por defecto 14 días.
+- La concurrencia reservada es configurable por Lambda. Los valores V1 por defecto son conservadores para limitar abuso/costo sin dejar el servicio bloqueado por una única request lenta.
+- IAM evita la policy administrada básica y define logging sobre log groups concretos, `dynamodb:PutItem` sobre la tabla de leads, `ses:SendEmail` sobre la identidad SES y `secretsmanager:GetSecretValue` sobre un secret ARN específico.
+- No se crea WAF, CAPTCHA/Turnstile, CloudFront ni Cloudflare aquí. Esos controles quedan como escalamiento si aparecen spam sostenido, abuso recurrente, costos anómalos o volumen alto de requests inválidos.
+- Security headers y CSP deben aplicarse cuando este repo administre el CloudFront/S3 productivo o durante el módulo de integración/deploy correspondiente. No se inventa infraestructura productiva paralela en M22.
+- `terraform.tfstate`, `terraform.tfvars`, `.terraform/` y credenciales OAuth locales quedan fuera de Git; el state puede contener información sensible.

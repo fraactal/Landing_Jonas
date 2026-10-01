@@ -8,6 +8,11 @@ variable "environment" {
   description = "Deployment environment name."
   type        = string
   default     = "production"
+
+  validation {
+    condition     = contains(["production", "staging", "development", "local"], var.environment)
+    error_message = "environment must be one of: production, staging, development, local."
+  }
 }
 
 variable "leads_table_name" {
@@ -35,9 +40,15 @@ variable "lambda_package_path" {
 }
 
 variable "allowed_origins" {
-  description = "Allowed browser origins for the Function URL. Do not use wildcard in production."
+  description = "Allowed browser origins for the Function URL. Do not use wildcard in production. Localhost belongs only in non-production tfvars."
   type        = list(string)
   default     = ["https://jonathanvaldes.com"]
+
+  validation {
+    condition     = alltrue([for origin in var.allowed_origins : origin != "*"])
+    error_message = "allowed_origins must not contain wildcard origins."
+  }
+
 }
 
 variable "ses_domain_identity" {
@@ -57,6 +68,24 @@ variable "lead_notification_from" {
   type        = string
   default     = "notificaciones@jonathanvaldes.com"
 }
+
+variable "lambda_log_retention_days" {
+  description = "CloudWatch log retention in days for public Lambdas. V1 keeps operational logs short-lived."
+  type        = number
+  default     = 14
+}
+
+variable "lead_reserved_concurrent_executions" {
+  description = "Reserved concurrency for the lead Lambda. Conservative V1 abuse/cost guard without blocking the service with one slow request."
+  type        = number
+  default     = 5
+}
+
+variable "booking_reserved_concurrent_executions" {
+  description = "Reserved concurrency for the booking Lambda. Slightly higher than lead because Calendar calls can be slower."
+  type        = number
+  default     = 5
+}
 variable "booking_lambda_function_name" {
   description = "Lambda function name for the booking API."
   type        = string
@@ -72,4 +101,9 @@ variable "booking_lambda_package_path" {
 variable "booking_google_secret_arn" {
   description = "ARN of the AWS Secrets Manager secret containing Google OAuth client_id, client_secret, refresh_token and calendar_id. The secret value is created outside Terraform."
   type        = string
+
+  validation {
+    condition     = can(regex("^arn:aws:secretsmanager:[^:]+:[0-9]{12}:secret:.+", var.booking_google_secret_arn)) && !strcontains(var.booking_google_secret_arn, "*")
+    error_message = "booking_google_secret_arn must be a specific AWS Secrets Manager secret ARN, not a wildcard."
+  }
 }

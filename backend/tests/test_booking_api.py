@@ -6,15 +6,16 @@ import sys
 from unittest.mock import patch
 
 BOOKING_PATH = Path(__file__).resolve().parents[1] / "booking_api"
+for module_name in ("handler", "validation", "availability", "google_calendar"):
+    sys.modules.pop(module_name, None)
+
 sys.path.insert(0, str(BOOKING_PATH))
 
 import availability
 import handler
 from availability import BusyInterval, DEFAULT_CONFIG, compute_available_slots
 from google_calendar import CalendarAuthError, CalendarClientError
-
-for module_name in ("handler", "validation", "availability", "google_calendar"):
-    sys.modules.pop(module_name, None)
+from validation import MAX_PAYLOAD_BYTES
 
 
 class Context:
@@ -52,10 +53,10 @@ class FakeCalendarClient:
         return self.get_response
 
 
-def event_for(payload, method="POST"):
+def event_for(payload, method="POST", content_type="application/json"):
     return {
         "requestContext": {"http": {"method": method}},
-        "headers": {"origin": "https://jonathanvaldes.com", "content-type": "application/json"},
+        "headers": {"origin": "https://jonathanvaldes.com", "content-type": content_type},
         "body": json.dumps(payload),
         "isBase64Encoded": False,
     }
@@ -127,10 +128,10 @@ class BookingHandlerTests(unittest.TestCase):
     def setUp(self):
         handler._calendar_client = None
 
-    def _run(self, payload=VALID_PAYLOAD, client=None):
+    def _run(self, payload=VALID_PAYLOAD, client=None, content_type="application/json"):
         fake = client or FakeCalendarClient()
         with patch.object(handler, "_get_calendar_client", return_value=fake), patch.object(availability, "utc_now", return_value=FIXED_NOW), patch.object(handler, "utc_now", return_value=FIXED_NOW):
-            response = handler.lambda_handler(event_for(payload), Context())
+            response = handler.lambda_handler(event_for(payload, content_type=content_type), Context())
         return response, fake
 
     def test_get_availability_returns_iso_slots(self):
@@ -154,7 +155,34 @@ class BookingHandlerTests(unittest.TestCase):
         self.assertEqual(len(fake.created), 1)
         self.assertEqual(fake.created[0]["client_request_id"], "booking-test-123")
 
-    def test_invalid_slot_returns_400(self):
+    def test_wrong_content_type_returns_415_without_google_client(self):
+        with patch.object(handler, "_get_calendar_client") as get_client:
+            response = handler.lambda_handler(event_for(VALID_PAYLOAD, content_type="text/plain"), Context())
+
+        self.assertEqual(response["statusCode"], 415)
+        self.assertEqual(json.loads(response["body"])["error"], "unsupported_media_type")
+        get_client.assert_not_called()
+
+    def test_oversized_payload_returns_413_without_google_client(self):
+        event = {
+            "requestContext": {"http": {"method": "POST"}},
+            "headers": {"origin": "https://jonathanvaldes.com", "content-type": "application/json"},
+            "body": "x" * (MAX_PAYLOAD_BYTES + 1),
+            "isBase64Encoded": False,
+        }
+        with patch.object(handler, "_get_calendar_client") as get_client:
+            response = handler.lambda_handler(event, Context())
+
+        self.assertEqual(response["statusCode"], 413)
+        get_client.assert_not_called()
+
+    def test_invalid_start_format_returns_400(self):
+        payload = dict(VALID_PAYLOAD, startAt="2026-10-05 13:00")
+        response, fake = self._run(payload)
+        self.assertEqual(response["statusCode"], 400)
+        self.assertEqual(len(fake.created), 0)
+
+    def test_invalid_slot_returns_409(self):
         payload = dict(VALID_PAYLOAD, startAt="2026-10-05T13:15:00Z")
         response, fake = self._run(payload)
         self.assertEqual(response["statusCode"], 409)
@@ -170,6 +198,25 @@ class BookingHandlerTests(unittest.TestCase):
 
     def test_honeypot_returns_invalid_request_without_google_create(self):
         payload = dict(VALID_PAYLOAD, website="bot")
+        response, fake = self._run(payload)
+        self.assertEqual(response["statusCode"], 400)
+        self.assertEqual(len(fake.created), 0)
+
+    def test_unknown_calendar_parameters_are_rejected(self):
+        payload = dict(
+            VALID_PAYLOAD,
+            calendarId="attacker@example.com",
+            endAt="2026-10-05T13:30:00Z",
+            durationMinutes=90,
+            attendees=["other@example.com"],
+            conferenceSolutionKey={"type": "other"},
+        )
+        response, fake = self._run(payload)
+        self.assertEqual(response["statusCode"], 400)
+        self.assertEqual(len(fake.created), 0)
+
+    def test_invalid_client_request_id_is_rejected(self):
+        payload = dict(VALID_PAYLOAD, clientRequestId="<script>alert(1)</script>")
         response, fake = self._run(payload)
         self.assertEqual(response["statusCode"], 400)
         self.assertEqual(len(fake.created), 0)
@@ -192,16 +239,17 @@ class BookingHandlerTests(unittest.TestCase):
         self.assertEqual(body["meetStatus"], "pending")
         self.assertEqual(fake.get_calls, ["event-pending"])
 
-    def test_auth_error_returns_500(self):
-        with patch.object(handler, "_get_calendar_client", side_effect=CalendarAuthError("missing secret")):
+    def test_auth_error_returns_sanitized_500(self):
+        with patch.object(handler, "_get_calendar_client", side_effect=CalendarAuthError("refresh_token secret-arn client_secret")):
             response = handler.lambda_handler(event_for(VALID_PAYLOAD), Context())
+        body = json.loads(response["body"])
         self.assertEqual(response["statusCode"], 500)
-        self.assertEqual(json.loads(response["body"])["error"], "internal_error")
+        self.assertEqual(body["error"], "internal_error")
+        self.assertNotIn("refresh_token", response["body"])
+        self.assertNotIn("client_secret", response["body"])
 
     def test_method_not_allowed(self):
-        response, _ = self._run(method_payload := VALID_PAYLOAD)
-        self.assertEqual(response["statusCode"], 201)
-        response = handler.lambda_handler(event_for(method_payload, method="GET"), Context())
+        response = handler.lambda_handler(event_for(VALID_PAYLOAD, method="GET"), Context())
         self.assertEqual(response["statusCode"], 405)
 
 

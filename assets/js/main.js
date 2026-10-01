@@ -417,7 +417,13 @@ if (contactForm) {
     }
 
     if (contactStatus) {
-      contactStatus.innerHTML = `El formulario estará disponible próximamente. Mientras tanto puedes contactarme por <a href="${buildWhatsappUrl("Hola Jonathan, vi tu sitio y quiero conversar sobre una solución tecnológica para mi empresa.")}" target="_blank" rel="noopener noreferrer">WhatsApp</a>.`;
+      contactStatus.textContent = "El formulario estará disponible próximamente. Mientras tanto puedes contactarme por ";
+      const whatsappLink = document.createElement("a");
+      whatsappLink.href = buildWhatsappUrl("Hola Jonathan, vi tu sitio y quiero conversar sobre una solución tecnológica para mi empresa.");
+      whatsappLink.target = "_blank";
+      whatsappLink.rel = "noopener noreferrer";
+      whatsappLink.textContent = "WhatsApp";
+      contactStatus.append(whatsappLink, ".");
     }
   });
 
