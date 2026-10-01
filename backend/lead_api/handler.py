@@ -204,6 +204,9 @@ def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
 
     try:
         payload = json.loads(raw_body.decode("utf-8"))
+        if isinstance(payload, dict) and str(payload.get("website", "")).strip():
+            print(f"lead_honeypot_triggered request_id={request_id}")
+            return _response(400, {"ok": False, "error": "invalid_request"}, origin=origin)
         lead_data = validate_lead_payload(payload)
     except (UnicodeDecodeError, json.JSONDecodeError, ValidationError):
         print(f"lead_validation_failed request_id={request_id}")

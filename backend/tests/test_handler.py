@@ -147,8 +147,12 @@ class HandlerTests(unittest.TestCase):
         handler._ses_client = ses
         payload = dict(VALID_PAYLOAD, website="bot")
 
-        response = handler.lambda_handler(event_for(payload), Context())
+        with patch("builtins.print") as printed:
+            response = handler.lambda_handler(event_for(payload), Context())
 
+        printed_text = " ".join(str(call.args[0]) for call in printed.call_args_list)
+        self.assertIn("lead_honeypot_triggered request_id=request-123", printed_text)
+        self.assertNotIn("bot", printed_text)
         self.assertEqual(response["statusCode"], 400)
         self.assertEqual(json.loads(response["body"])["error"], "invalid_request")
         self.assertEqual(len(table.items), 0)

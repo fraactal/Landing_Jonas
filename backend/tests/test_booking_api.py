@@ -198,7 +198,12 @@ class BookingHandlerTests(unittest.TestCase):
 
     def test_honeypot_returns_invalid_request_without_google_create(self):
         payload = dict(VALID_PAYLOAD, website="bot")
-        response, fake = self._run(payload)
+        with patch("builtins.print") as printed:
+            response, fake = self._run(payload)
+
+        printed_text = " ".join(str(call.args[0]) for call in printed.call_args_list)
+        self.assertIn("booking_honeypot_triggered request_id=booking-request-123", printed_text)
+        self.assertNotIn("bot", printed_text)
         self.assertEqual(response["statusCode"], 400)
         self.assertEqual(len(fake.created), 0)
 

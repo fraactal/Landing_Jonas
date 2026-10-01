@@ -223,7 +223,7 @@ def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
         return _response(400, {"ok": False, "error": "invalid_request"}, origin=origin)
 
     if isinstance(payload, dict) and str(payload.get("website", "")).strip():
-        print(f"booking_validation_failed request_id={request_id}")
+        print(f"booking_honeypot_triggered request_id={request_id}")
         return _response(400, {"ok": False, "error": "invalid_request"}, origin=origin)
 
     try:

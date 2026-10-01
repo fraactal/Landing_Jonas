@@ -37,3 +37,17 @@ output "booking_api_function_url" {
   description = "Public Lambda Function URL for the booking API. Do not treat this URL as a secret."
   value       = aws_lambda_function_url.booking_api.function_url
 }
+output "alerts_topic_arn" {
+  description = "SNS topic ARN used by CloudWatch alarms for operational notifications."
+  value       = aws_sns_topic.alerts.arn
+}
+
+output "alerts_topic_name" {
+  description = "SNS topic name used by CloudWatch alarms for operational notifications."
+  value       = aws_sns_topic.alerts.name
+}
+
+output "observability_dashboard_name" {
+  description = "CloudWatch dashboard name for backend observability."
+  value       = aws_cloudwatch_dashboard.website.dashboard_name
+}

@@ -107,3 +107,81 @@ variable "booking_google_secret_arn" {
     error_message = "booking_google_secret_arn must be a specific AWS Secrets Manager secret ARN, not a wildcard."
   }
 }
+
+variable "observability_namespace" {
+  description = "CloudWatch namespace for low-cardinality application metrics derived from sanitized Lambda logs."
+  type        = string
+  default     = "JonathanValdes/Website"
+}
+
+variable "enable_alerting" {
+  description = "Whether CloudWatch alarms should execute actions. Actions are still gated to production."
+  type        = bool
+  default     = true
+}
+
+variable "alerts_topic_name" {
+  description = "SNS topic name for operational alarms."
+  type        = string
+  default     = "jonathanvaldes-alerts"
+}
+
+variable "alerts_email" {
+  description = "Email endpoint for the SNS alarm subscription. SNS requires manual confirmation before notifications are delivered."
+  type        = string
+  default     = "jonathan.valdes.o@gmail.com"
+}
+
+variable "observability_dashboard_name" {
+  description = "CloudWatch dashboard name for website backend observability."
+  type        = string
+  default     = "jonathanvaldes-website-v1"
+}
+
+variable "lambda_alarm_period_seconds" {
+  description = "CloudWatch alarm period for Lambda errors, throttles and short-window application failures."
+  type        = number
+  default     = 300
+}
+
+variable "notification_alarm_period_seconds" {
+  description = "CloudWatch alarm period for notification and third-party integration failures."
+  type        = number
+  default     = 600
+}
+
+variable "lambda_error_threshold" {
+  description = "Unhandled Lambda errors required to trigger the V1 warning alarm."
+  type        = number
+  default     = 1
+}
+
+variable "throttle_threshold" {
+  description = "Lambda throttles required across two periods to trigger the V1 warning alarm."
+  type        = number
+  default     = 3
+}
+
+variable "persistence_failure_threshold" {
+  description = "Lead persistence failures required to trigger the V1 critical alarm."
+  type        = number
+  default     = 1
+}
+
+variable "notification_failure_threshold" {
+  description = "Lead SES notification failures required to trigger the V1 warning alarm."
+  type        = number
+  default     = 2
+}
+
+variable "booking_calendar_auth_failure_threshold" {
+  description = "Booking Calendar/OAuth failures required to trigger the V1 critical alarm."
+  type        = number
+  default     = 2
+}
+
+variable "invalid_traffic_threshold" {
+  description = "Combined invalid request and honeypot events required to trigger the V1 abuse warning alarm."
+  type        = number
+  default     = 20
+}
