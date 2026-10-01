@@ -107,6 +107,7 @@ const fallbackWhatsappMessage = "Hola Jonathan, vi tu sitio y quiero conversar s
 const buildWhatsappUrl = (message) => `${whatsappBaseUrl}${encodeURIComponent(message || fallbackWhatsappMessage)}`;
 const contactForm = document.querySelector("[data-contact-form]");
 const contactProblemType = document.querySelector("[data-contact-field=\"problemType\"]");
+const bookingProblemType = document.querySelector("[data-booking-field=\"problemType\"]");
 const contactSourceContext = document.querySelector("[data-contact-source-context]");
 
 if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemDetailCta && problemDetail) {
@@ -184,6 +185,9 @@ if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemD
       problemDetailCta.href = buildWhatsappUrl(content.whatsappMessage);
       if (contactProblemType && problemOptionToFormValue[selectedButton.dataset.problemOption]) {
         contactProblemType.value = problemOptionToFormValue[selectedButton.dataset.problemOption];
+      }
+      if (bookingProblemType && problemOptionToFormValue[selectedButton.dataset.problemOption]) {
+        bookingProblemType.value = problemOptionToFormValue[selectedButton.dataset.problemOption];
       }
       if (contactSourceContext && problemOptionToFormValue[selectedButton.dataset.problemOption]) {
         contactSourceContext.value = "problem-selector";
@@ -428,6 +432,343 @@ if (contactForm) {
     const fieldName = event.target?.dataset?.contactField;
     if (fieldName && messages[fieldName]) {
       setFieldError(fieldName);
+    }
+  });
+}
+
+const bookingPanel = document.querySelector("[data-booking-panel]");
+const bookingForm = document.querySelector("[data-booking-form]");
+const bookingLoad = document.querySelector("[data-booking-load]");
+const bookingSlots = document.querySelector("[data-booking-slots]");
+const bookingStatus = document.querySelector("[data-booking-status]");
+const bookingSelected = document.querySelector("[data-booking-selected]");
+const bookingResult = document.querySelector("[data-booking-result]");
+const bookingSubmit = document.querySelector("[data-booking-submit]");
+const bookingOpenLinks = document.querySelectorAll("[data-booking-open]");
+
+if (bookingPanel && bookingForm) {
+  const bookingEndpoint = window.JV_BOOKING_ENDPOINT || document.querySelector('meta[name="booking-endpoint"]')?.content || "";
+  const bookingFields = {
+    name: bookingForm.querySelector('[data-booking-field="name"]'),
+    company: bookingForm.querySelector('[data-booking-field="company"]'),
+    email: bookingForm.querySelector('[data-booking-field="email"]'),
+    phone: bookingForm.querySelector('[data-booking-field="phone"]'),
+    problemType: bookingForm.querySelector('[data-booking-field="problemType"]'),
+    message: bookingForm.querySelector('[data-booking-field="message"]'),
+    privacyAccepted: bookingForm.querySelector('[data-booking-field="privacyAccepted"]'),
+    startAt: bookingForm.querySelector('[data-booking-field="startAt"]'),
+    clientRequestId: bookingForm.querySelector('[data-booking-field="clientRequestId"]'),
+    website: bookingForm.querySelector('[data-booking-field="website"]'),
+  };
+  const bookingAllowedProblemTypes = new Set([
+    "Automatizar un proceso",
+    "Crear una aplicación",
+    "Conectar sistemas",
+    "Trabajar con mis datos",
+    "Mejorar infraestructura",
+    "Mejorar calidad",
+    "Mejorar monitoreo / visibilidad",
+    "No estoy seguro",
+    "Otro",
+  ]);
+  const bookingMessages = {
+    name: "Ingresa tu nombre.",
+    email: "Ingresa un email válido.",
+    problemType: "Selecciona qué necesitas conversar.",
+    message: "Cuéntame brevemente el contexto.",
+    privacyAccepted: "Debes aceptar la Política de Privacidad para continuar.",
+    startAt: "Selecciona un horario disponible.",
+  };
+  const dateFormatter = new Intl.DateTimeFormat("es-CL", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    timeZone: "America/Santiago",
+  });
+  const timeFormatter = new Intl.DateTimeFormat("es-CL", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "America/Santiago",
+  });
+  let selectedSlotButton;
+  let availabilityLoaded = false;
+
+  const setBookingStatus = (message) => {
+    if (bookingStatus) {
+      bookingStatus.textContent = message;
+    }
+  };
+
+  const setBookingResult = (message) => {
+    if (bookingResult) {
+      bookingResult.textContent = message;
+    }
+  };
+
+  const setBookingError = (fieldName, message = "") => {
+    const error = bookingForm.querySelector(`[data-booking-error="${fieldName}"]`);
+    const field = bookingFields[fieldName];
+    const wrapper = field?.closest(".contact-field");
+
+    if (error) {
+      error.textContent = message;
+    }
+
+    if (field) {
+      field.toggleAttribute("aria-invalid", Boolean(message));
+    }
+
+    if (wrapper) {
+      wrapper.classList.toggle("is-invalid", Boolean(message));
+    }
+  };
+
+  const buildClientRequestId = () => {
+    if (window.crypto?.randomUUID) {
+      return window.crypto.randomUUID();
+    }
+    return `booking-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  };
+
+  const postBookingAction = async (payload) => {
+    if (!bookingEndpoint) {
+      throw new Error("missing_booking_endpoint");
+    }
+
+    const response = await fetch(bookingEndpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || data.ok === false) {
+      const error = new Error(data.error || "booking_request_failed");
+      error.status = response.status;
+      error.payload = data;
+      throw error;
+    }
+    return data;
+  };
+
+  const selectSlot = (button, slot) => {
+    if (selectedSlotButton) {
+      selectedSlotButton.setAttribute("aria-pressed", "false");
+    }
+    selectedSlotButton = button;
+    selectedSlotButton.setAttribute("aria-pressed", "true");
+    bookingFields.startAt.value = slot.startAt;
+    bookingFields.clientRequestId.value = buildClientRequestId();
+    if (bookingSelected) {
+      bookingSelected.textContent = `Horario seleccionado: ${dateFormatter.format(new Date(slot.startAt))}, ${timeFormatter.format(new Date(slot.startAt))} hrs. Horarios de Santiago, Chile.`;
+    }
+    setBookingError("startAt");
+    setBookingResult("");
+  };
+
+  const renderSlots = (slots) => {
+    if (!bookingSlots) {
+      return;
+    }
+    bookingSlots.innerHTML = "";
+    selectedSlotButton = undefined;
+    bookingFields.startAt.value = "";
+    if (bookingSelected) {
+      bookingSelected.textContent = "No has seleccionado un horario.";
+    }
+
+    if (!slots.length) {
+      setBookingStatus("No hay horarios disponibles para este período.");
+      return;
+    }
+
+    const groups = new Map();
+    slots.forEach((slot) => {
+      const dateKey = slot.displayDate || slot.startAt.slice(0, 10);
+      if (!groups.has(dateKey)) {
+        groups.set(dateKey, []);
+      }
+      groups.get(dateKey).push(slot);
+    });
+
+    groups.forEach((groupSlots) => {
+      const group = document.createElement("div");
+      group.className = "booking-slot-group";
+
+      const title = document.createElement("p");
+      title.className = "booking-slot-group__date";
+      title.textContent = dateFormatter.format(new Date(groupSlots[0].startAt));
+      group.append(title);
+
+      const slotWrap = document.createElement("div");
+      slotWrap.className = "booking-slot-group__slots";
+
+      groupSlots.forEach((slot) => {
+        const button = document.createElement("button");
+        button.className = "booking-slot";
+        button.type = "button";
+        button.setAttribute("aria-pressed", "false");
+        button.textContent = `${timeFormatter.format(new Date(slot.startAt))} hrs`;
+        button.addEventListener("click", () => selectSlot(button, slot));
+        slotWrap.append(button);
+      });
+
+      group.append(slotWrap);
+      bookingSlots.append(group);
+    });
+
+    setBookingStatus("Selecciona un horario disponible. Horarios de Santiago, Chile.");
+  };
+
+  const loadAvailability = async () => {
+    setBookingResult("");
+    setBookingStatus("Cargando horarios disponibles...");
+    if (bookingLoad) {
+      bookingLoad.disabled = true;
+    }
+
+    try {
+      const data = await postBookingAction({ action: "getAvailability", website: "" });
+      renderSlots(Array.isArray(data.slots) ? data.slots : []);
+      availabilityLoaded = true;
+    } catch (error) {
+      if (error.message === "missing_booking_endpoint") {
+        setBookingStatus("La agenda quedará disponible cuando se configure el endpoint de reservas.");
+      } else {
+        setBookingStatus("No pudimos cargar horarios disponibles. Intenta nuevamente.");
+      }
+    } finally {
+      if (bookingLoad) {
+        bookingLoad.disabled = false;
+      }
+    }
+  };
+
+  const validateBookingForm = () => {
+    let firstInvalidField;
+    Object.keys(bookingMessages).forEach((fieldName) => setBookingError(fieldName));
+
+    const name = bookingFields.name?.value.trim() || "";
+    const email = bookingFields.email?.value.trim() || "";
+    const company = bookingFields.company?.value.trim() || "";
+    const phone = bookingFields.phone?.value.trim() || "";
+    const problemType = bookingFields.problemType?.value || "";
+    const message = bookingFields.message?.value.trim() || "";
+    const website = bookingFields.website?.value.trim() || "";
+    const startAt = bookingFields.startAt?.value || "";
+
+    if (bookingFields.name) bookingFields.name.value = name;
+    if (bookingFields.email) bookingFields.email.value = email;
+    if (bookingFields.company) bookingFields.company.value = company;
+    if (bookingFields.phone) bookingFields.phone.value = phone;
+    if (bookingFields.message) bookingFields.message.value = message;
+
+    const markInvalid = (fieldName) => {
+      setBookingError(fieldName, bookingMessages[fieldName]);
+      if (!firstInvalidField) {
+        firstInvalidField = bookingFields[fieldName];
+      }
+    };
+
+    if (!startAt) markInvalid("startAt");
+    if (!name) markInvalid("name");
+    if (!email || !bookingFields.email.checkValidity()) markInvalid("email");
+    if (!problemType || !bookingAllowedProblemTypes.has(problemType)) markInvalid("problemType");
+    if (!message) markInvalid("message");
+    if (!bookingFields.privacyAccepted?.checked) markInvalid("privacyAccepted");
+    if (website) return { isValid: false, firstInvalidField: null };
+
+    return { isValid: !firstInvalidField, firstInvalidField };
+  };
+
+  bookingOpenLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      window.setTimeout(() => {
+        bookingPanel.querySelector("button, input, select, textarea")?.focus({ preventScroll: true });
+        if (!availabilityLoaded) {
+          loadAvailability();
+        }
+      }, 120);
+    });
+  });
+
+  bookingLoad?.addEventListener("click", loadAvailability);
+
+  bookingForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    setBookingResult("");
+
+    const { isValid, firstInvalidField } = validateBookingForm();
+    if (!isValid) {
+      firstInvalidField?.focus();
+      if (!firstInvalidField && bookingFields.website?.value.trim()) {
+        setBookingResult("No pudimos agendar la reunión. Intenta nuevamente.");
+      }
+      return;
+    }
+
+    if (bookingSubmit) {
+      bookingSubmit.disabled = true;
+      bookingSubmit.textContent = "Agendando...";
+    }
+
+    const payload = {
+      action: "createBooking",
+      name: bookingFields.name.value.trim(),
+      email: bookingFields.email.value.trim(),
+      problemType: bookingFields.problemType.value,
+      message: bookingFields.message.value.trim(),
+      startAt: bookingFields.startAt.value,
+      privacyAccepted: bookingFields.privacyAccepted.checked,
+      source: "website",
+      clientRequestId: bookingFields.clientRequestId.value || buildClientRequestId(),
+      website: bookingFields.website.value.trim(),
+    };
+
+    if (bookingFields.company.value.trim()) payload.company = bookingFields.company.value.trim();
+    if (bookingFields.phone.value.trim()) payload.phone = bookingFields.phone.value.trim();
+
+    try {
+      const data = await postBookingAction(payload);
+      const message = data.meetUrl
+        ? "Tu reunión quedó agendada. Revisa la invitación de Google Calendar para acceder mediante Google Meet."
+        : "Tu reunión quedó agendada. Revisa la invitación de Google Calendar para acceder mediante Google Meet.";
+      setBookingResult(message);
+      bookingForm.reset();
+      bookingFields.startAt.value = "";
+      bookingFields.clientRequestId.value = "";
+      if (selectedSlotButton) selectedSlotButton.setAttribute("aria-pressed", "false");
+      selectedSlotButton = undefined;
+      if (bookingSelected) bookingSelected.textContent = "No has seleccionado un horario.";
+      loadAvailability();
+    } catch (error) {
+      if (error.status === 409 || error.payload?.error === "slot_unavailable") {
+        setBookingResult("Ese horario acaba de dejar de estar disponible. Selecciona otro.");
+        loadAvailability();
+      } else if (error.message === "missing_booking_endpoint") {
+        setBookingResult("La agenda quedará disponible cuando se configure el endpoint de reservas.");
+      } else {
+        setBookingResult("No pudimos agendar la reunión. Intenta nuevamente.");
+      }
+    } finally {
+      if (bookingSubmit) {
+        bookingSubmit.disabled = false;
+        bookingSubmit.textContent = "Agendar diagnóstico";
+      }
+    }
+  });
+
+  bookingForm.addEventListener("input", (event) => {
+    const fieldName = event.target?.dataset?.bookingField;
+    if (fieldName && bookingMessages[fieldName]) {
+      setBookingError(fieldName);
+    }
+  });
+
+  bookingForm.addEventListener("change", (event) => {
+    const fieldName = event.target?.dataset?.bookingField;
+    if (fieldName && bookingMessages[fieldName]) {
+      setBookingError(fieldName);
     }
   });
 }

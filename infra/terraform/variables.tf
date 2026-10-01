@@ -57,3 +57,19 @@ variable "lead_notification_from" {
   type        = string
   default     = "notificaciones@jonathanvaldes.com"
 }
+variable "booking_lambda_function_name" {
+  description = "Lambda function name for the booking API."
+  type        = string
+  default     = "jonathanvaldes-booking-api"
+}
+
+variable "booking_lambda_package_path" {
+  description = "Path to the zipped booking Lambda package created locally before plan/apply."
+  type        = string
+  default     = "../../build/booking_api.zip"
+}
+
+variable "booking_google_secret_arn" {
+  description = "ARN of the AWS Secrets Manager secret containing Google OAuth client_id, client_secret, refresh_token and calendar_id. The secret value is created outside Terraform."
+  type        = string
+}

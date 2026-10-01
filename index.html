@@ -74,7 +74,7 @@
           <a href="#como-trabajamos">Cómo trabajamos</a>
           <a href="#proyectos">Proyectos</a>
           <a href="#faq">FAQ</a>
-          <a class="button button--secondary site-nav__secondary" href="#contacto">Agenda hoy mismo</a>
+          <a class="button button--secondary site-nav__secondary" href="#agenda" data-booking-open>Agenda hoy mismo</a>
           <a class="button button--primary" href="https://wa.me/56931367372?text=Hola%20Jonathan%2C%20vi%20tu%20sitio%20y%20quiero%20conversar%20sobre%20un%20problema%20tecnol%C3%B3gico%20en%20mi%20empresa." target="_blank" rel="noopener noreferrer">Háblanos hoy</a>
         </nav>
       </div>
@@ -91,7 +91,7 @@
 
             <div class="hero__actions cluster" aria-label="Acciones principales">
               <a class="button button--primary" href="https://wa.me/56931367372?text=Hola%20Jonathan%2C%20vi%20tu%20sitio%20y%20quiero%20conversar%20sobre%20un%20problema%20tecnol%C3%B3gico%20en%20mi%20empresa." target="_blank" rel="noopener noreferrer">Háblanos hoy</a>
-              <a class="button button--secondary" href="#contacto">Agenda hoy mismo</a>
+              <a class="button button--secondary" href="#agenda" data-booking-open>Agenda hoy mismo</a>
             </div>
 
             <p class="hero__support">Evaluación inicial sin compromiso · Demo/PoC cuando el caso lo permite.</p>
@@ -584,18 +584,112 @@
             <p>Cuéntame qué está ocurriendo, qué proceso quieres mejorar o qué idea necesitas validar. Podemos revisar el caso y definir cuál sería el siguiente paso.</p>
             <div class="final-cta__actions cluster" aria-label="Acciones de contacto temporales">
               <a class="button button--primary" href="https://wa.me/56931367372?text=Hola%20Jonathan%2C%20vi%20tu%20sitio%20y%20quiero%20conversar%20sobre%20una%20soluci%C3%B3n%20tecnol%C3%B3gica%20para%20mi%20empresa." target="_blank" rel="noopener noreferrer">Háblanos hoy</a>
-              <a class="button button--secondary" href="#contacto">Agenda hoy mismo</a>
+              <a class="button button--secondary" href="#agenda" data-booking-open>Agenda hoy mismo</a>
             </div>
             <p class="final-cta__note">Evaluación inicial sin compromiso.</p>
           </div>
 
+
+          <div class="booking-panel" id="agenda" aria-labelledby="booking-title" data-booking-panel>
+            <div class="booking-panel__intro flow">
+              <p class="booking-panel__eyebrow">Agenda</p>
+              <h3 id="booking-title">Agenda un diagnóstico tecnológico</h3>
+              <p>Reserva una conversación inicial de 30 minutos para revisar el problema, entender contexto y definir un siguiente paso.</p>
+              <p class="booking-panel__timezone">Horarios de Santiago, Chile · America/Santiago</p>
+            </div>
+
+            <div class="booking-panel__body">
+              <div class="booking-availability" aria-labelledby="booking-slots-title">
+                <div class="booking-availability__header">
+                  <h4 id="booking-slots-title">Horarios disponibles</h4>
+                  <button class="button button--secondary booking-availability__reload" type="button" data-booking-load>Consultar horarios</button>
+                </div>
+                <p class="booking-availability__status" data-booking-status role="status" aria-live="polite">Consulta los horarios disponibles para comenzar.</p>
+                <div class="booking-slots" data-booking-slots aria-label="Horarios disponibles para diagnóstico tecnológico"></div>
+              </div>
+
+              <form class="booking-form" data-booking-form novalidate>
+                <input type="hidden" name="action" value="createBooking">
+                <input type="hidden" name="source" value="website">
+                <input type="hidden" name="startAt" data-booking-field="startAt">
+                <input type="hidden" name="clientRequestId" data-booking-field="clientRequestId">
+
+                <div class="contact-form__honeypot" aria-hidden="true">
+                  <label for="booking-website">Website</label>
+                  <input id="booking-website" name="website" type="text" tabindex="-1" autocomplete="off" data-booking-field="website">
+                </div>
+
+                <p class="booking-form__selected" data-booking-selected>No has seleccionado un horario.</p>
+
+                <div class="contact-form__grid">
+                  <div class="contact-field">
+                    <label for="booking-name">Nombre</label>
+                    <input id="booking-name" name="name" type="text" autocomplete="name" maxlength="120" required aria-describedby="booking-name-error" data-booking-field="name">
+                    <p class="contact-field__error" id="booking-name-error" data-booking-error="name"></p>
+                  </div>
+
+                  <div class="contact-field">
+                    <label for="booking-company">Empresa</label>
+                    <input id="booking-company" name="company" type="text" autocomplete="organization" maxlength="160" data-booking-field="company">
+                  </div>
+
+                  <div class="contact-field">
+                    <label for="booking-email">Email</label>
+                    <input id="booking-email" name="email" type="email" autocomplete="email" maxlength="180" required aria-describedby="booking-email-error" data-booking-field="email">
+                    <p class="contact-field__error" id="booking-email-error" data-booking-error="email"></p>
+                  </div>
+
+                  <div class="contact-field">
+                    <label for="booking-phone">Teléfono / WhatsApp</label>
+                    <input id="booking-phone" name="phone" type="tel" autocomplete="tel" maxlength="40" data-booking-field="phone">
+                  </div>
+                </div>
+
+                <div class="contact-field">
+                  <label for="booking-problem-type">¿Qué necesitas conversar?</label>
+                  <select id="booking-problem-type" name="problemType" required aria-describedby="booking-problem-type-error" data-booking-field="problemType">
+                    <option value="">Selecciona una opción</option>
+                    <option value="Automatizar un proceso">Automatizar un proceso</option>
+                    <option value="Crear una aplicación">Crear una aplicación</option>
+                    <option value="Conectar sistemas">Conectar sistemas</option>
+                    <option value="Trabajar con mis datos">Trabajar con mis datos</option>
+                    <option value="Mejorar infraestructura">Mejorar infraestructura</option>
+                    <option value="Mejorar calidad">Mejorar calidad</option>
+                    <option value="Mejorar monitoreo / visibilidad">Mejorar monitoreo / visibilidad</option>
+                    <option value="No estoy seguro">No estoy seguro</option>
+                    <option value="Otro">Otro</option>
+                  </select>
+                  <p class="contact-field__error" id="booking-problem-type-error" data-booking-error="problemType"></p>
+                </div>
+
+                <div class="contact-field">
+                  <label for="booking-message">Mensaje/contexto</label>
+                  <textarea id="booking-message" name="message" rows="5" maxlength="2000" required aria-describedby="booking-message-help booking-message-error" data-booking-field="message"></textarea>
+                  <p class="contact-field__help" id="booking-message-help">Cuéntame brevemente qué ocurre hoy y qué te gustaría revisar durante el diagnóstico.</p>
+                  <p class="contact-field__error" id="booking-message-error" data-booking-error="message"></p>
+                </div>
+
+                <div class="contact-field contact-field--checkbox">
+                  <input id="booking-privacy" name="privacyAccepted" type="checkbox" required aria-describedby="booking-privacy-error" data-booking-field="privacyAccepted">
+                  <label for="booking-privacy">He leído y acepto la <a href="/privacidad">Política de Privacidad</a>.</label>
+                </div>
+                <p class="contact-field__error contact-field__error--checkbox" id="booking-privacy-error" data-booking-error="privacyAccepted"></p>
+
+                <div class="contact-form__actions">
+                  <button class="button button--primary" type="submit" data-booking-submit>Agendar diagnóstico</button>
+                </div>
+
+                <p class="contact-form__status" data-booking-result role="status" aria-live="polite"></p>
+              </form>
+            </div>
+          </div>
           <div class="contact-form-panel" aria-labelledby="contact-form-title">
             <div class="contact-form-panel__intro flow">
               <p class="contact-form-panel__eyebrow">Formulario</p>
               <h3 id="contact-form-title">Cuéntame tu caso por escrito</h3>
               <p>Si prefieres escribir primero, cuéntame brevemente el contexto y revisaremos el caso para definir el siguiente paso.</p>
               <p class="contact-form-panel__fallback">¿Prefieres conversar directamente? <a href="https://wa.me/56931367372?text=Hola%20Jonathan%2C%20vi%20tu%20sitio%20y%20quiero%20conversar%20sobre%20una%20soluci%C3%B3n%20tecnol%C3%B3gica%20para%20mi%20empresa." target="_blank" rel="noopener noreferrer">Háblanos por WhatsApp</a>.</p>
-              <p class="contact-form-panel__note">Agenda hoy mismo sigue pendiente para una etapa posterior.</p>
+              <p class="contact-form-panel__note">Agenda hoy mismo permite revisar horarios disponibles para un diagnóstico tecnológico.</p>
             </div>
 
             <form class="contact-form" id="contact-form" data-contact-form novalidate>

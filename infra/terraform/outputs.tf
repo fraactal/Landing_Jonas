@@ -33,3 +33,7 @@ output "ses_dkim_cname_records" {
     }
   ]
 }
+output "booking_api_function_url" {
+  description = "Public Lambda Function URL for the booking API. Do not treat this URL as a secret."
+  value       = aws_lambda_function_url.booking_api.function_url
+}

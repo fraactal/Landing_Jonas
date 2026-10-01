@@ -126,3 +126,65 @@ resource "aws_lambda_function_url" "lead_api" {
     max_age       = 300
   }
 }
+
+resource "aws_iam_role" "booking_api" {
+  name               = "${var.booking_lambda_function_name}-role"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+
+  tags = local.common_tags
+}
+
+resource "aws_iam_role_policy_attachment" "booking_lambda_basic_execution" {
+  role       = aws_iam_role.booking_api.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+data "aws_iam_policy_document" "booking_google_secret_read" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "secretsmanager:GetSecretValue",
+    ]
+
+    resources = [var.booking_google_secret_arn]
+  }
+}
+
+resource "aws_iam_role_policy" "booking_google_secret_read" {
+  name   = "${var.booking_lambda_function_name}-google-secret-read"
+  role   = aws_iam_role.booking_api.id
+  policy = data.aws_iam_policy_document.booking_google_secret_read.json
+}
+
+resource "aws_lambda_function" "booking_api" {
+  function_name    = var.booking_lambda_function_name
+  description      = "Provides jonathanvaldes.com booking availability and Google Calendar event creation."
+  role             = aws_iam_role.booking_api.arn
+  runtime          = var.lambda_runtime
+  handler          = "handler.lambda_handler"
+  filename         = var.booking_lambda_package_path
+  source_code_hash = filebase64sha256(var.booking_lambda_package_path)
+
+  environment {
+    variables = {
+      BOOKING_GOOGLE_SECRET_ARN = var.booking_google_secret_arn
+      ALLOWED_ORIGINS           = join(",", var.allowed_origins)
+      ENVIRONMENT               = var.environment
+    }
+  }
+
+  tags = local.common_tags
+}
+
+resource "aws_lambda_function_url" "booking_api" {
+  function_name      = aws_lambda_function.booking_api.function_name
+  authorization_type = "NONE"
+
+  cors {
+    allow_headers = ["content-type"]
+    allow_methods = ["POST"]
+    allow_origins = var.allowed_origins
+    max_age       = 300
+  }
+}
