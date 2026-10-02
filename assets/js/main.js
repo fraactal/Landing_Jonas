@@ -105,6 +105,8 @@ const problemDetail = document.querySelector(".problem-detail");
 const whatsappBaseUrl = "https://wa.me/56931367372?text=";
 const fallbackWhatsappMessage = "Hola Jonathan, vi tu sitio y quiero conversar sobre un problema tecnológico en mi empresa.";
 const buildWhatsappUrl = (message) => `${whatsappBaseUrl}${encodeURIComponent(message || fallbackWhatsappMessage)}`;
+const requestTimeoutMs = 12000;
+const getRuntimeEndpoint = (globalName, metaName) => window[globalName] || document.querySelector(`meta[name="${metaName}"]`)?.content.trim() || "";
 const contactForm = document.querySelector("[data-contact-form]");
 const contactProblemType = document.querySelector("[data-contact-field=\"problemType\"]");
 const bookingProblemType = document.querySelector("[data-booking-field=\"problemType\"]");
@@ -297,7 +299,9 @@ const contactSubmit = document.querySelector("[data-contact-submit]");
 if (contactForm) {
   const fields = {
     name: contactForm.querySelector("[data-contact-field=\"name\"]"),
+    company: contactForm.querySelector("[data-contact-field=\"company\"]"),
     email: contactForm.querySelector("[data-contact-field=\"email\"]"),
+    phone: contactForm.querySelector("[data-contact-field=\"phone\"]"),
     problemType: contactForm.querySelector("[data-contact-field=\"problemType\"]"),
     message: contactForm.querySelector("[data-contact-field=\"message\"]"),
     privacyAccepted: contactForm.querySelector("[data-contact-field=\"privacyAccepted\"]"),
@@ -359,6 +363,12 @@ if (contactForm) {
     if (fields.email) {
       fields.email.value = email;
     }
+    if (fields.company) {
+      fields.company.value = fields.company.value.trim();
+    }
+    if (fields.phone) {
+      fields.phone.value = fields.phone.value.trim();
+    }
     if (fields.message) {
       fields.message.value = message;
     }
@@ -397,12 +407,61 @@ if (contactForm) {
     return { isValid: !firstInvalidField, firstInvalidField };
   };
 
-  contactForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    if (contactStatus) {
-      contactStatus.textContent = "";
+  const leadEndpoint = getRuntimeEndpoint("JV_LEAD_ENDPOINT", "lead-endpoint");
+  const setContactStatus = (message, { includeWhatsapp = false } = {}) => {
+    if (!contactStatus) {
+      return;
     }
+
+    contactStatus.textContent = message;
+
+    if (includeWhatsapp) {
+      contactStatus.append(" ");
+      const whatsappLink = document.createElement("a");
+      whatsappLink.href = buildWhatsappUrl("Hola Jonathan, vi tu sitio y quiero conversar sobre una solución tecnológica para mi empresa.");
+      whatsappLink.target = "_blank";
+      whatsappLink.rel = "noopener noreferrer";
+      whatsappLink.textContent = "WhatsApp";
+      contactStatus.append(whatsappLink, ".");
+    }
+  };
+
+  const postLead = async (payload) => {
+    if (!leadEndpoint) {
+      throw new Error("missing_lead_endpoint");
+    }
+
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), requestTimeoutMs);
+    let response;
+
+    try {
+      response = await fetch(leadEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "omit",
+        signal: controller.signal,
+        body: JSON.stringify(payload),
+      });
+    } finally {
+      window.clearTimeout(timeoutId);
+    }
+
+    const data = await response.json().catch(() => ({}));
+
+    if (response.status !== 201 || data.ok !== true) {
+      const error = new Error(data.error || "lead_request_failed");
+      error.status = response.status;
+      error.payload = data;
+      throw error;
+    }
+
+    return data;
+  };
+
+  contactForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    setContactStatus("");
 
     const { isValid, firstInvalidField } = validateContactForm();
 
@@ -411,19 +470,45 @@ if (contactForm) {
       return;
     }
 
-    if (contactSubmit) {
-      contactSubmit.textContent = "Enviar mi caso";
-      contactSubmit.disabled = false;
+    if (!leadEndpoint) {
+      setContactStatus("El formulario quedará disponible cuando se configure el endpoint de contacto.", { includeWhatsapp: true });
+      return;
     }
 
-    if (contactStatus) {
-      contactStatus.textContent = "El formulario estará disponible próximamente. Mientras tanto puedes contactarme por ";
-      const whatsappLink = document.createElement("a");
-      whatsappLink.href = buildWhatsappUrl("Hola Jonathan, vi tu sitio y quiero conversar sobre una solución tecnológica para mi empresa.");
-      whatsappLink.target = "_blank";
-      whatsappLink.rel = "noopener noreferrer";
-      whatsappLink.textContent = "WhatsApp";
-      contactStatus.append(whatsappLink, ".");
+    if (contactSubmit) {
+      contactSubmit.textContent = "Enviando...";
+      contactSubmit.disabled = true;
+    }
+
+    const payload = {
+      action: "createLead",
+      name: fields.name.value.trim(),
+      company: fields.company?.value.trim() || "",
+      email: fields.email.value.trim(),
+      phone: fields.phone?.value.trim() || "",
+      problemType: fields.problemType.value,
+      message: fields.message.value.trim(),
+      privacyAccepted: fields.privacyAccepted.checked,
+      source: "website",
+      sourceContext: contactSourceContext?.value || "form",
+      website: fields.website?.value.trim() || "",
+    };
+
+    try {
+      await postLead(payload);
+      contactForm.reset();
+      if (contactSourceContext) {
+        contactSourceContext.value = "form";
+      }
+      Object.keys(messages).forEach((fieldName) => setFieldError(fieldName));
+      setContactStatus("Gracias. Recibimos tu mensaje y revisaremos el caso para definir el siguiente paso.");
+    } catch (error) {
+      setContactStatus("No pudimos enviar tu mensaje. Intenta nuevamente o contáctame por WhatsApp.", { includeWhatsapp: true });
+    } finally {
+      if (contactSubmit) {
+        contactSubmit.textContent = "Enviar mi caso";
+        contactSubmit.disabled = false;
+      }
     }
   });
 
@@ -453,7 +538,7 @@ const bookingSubmit = document.querySelector("[data-booking-submit]");
 const bookingOpenLinks = document.querySelectorAll("[data-booking-open]");
 
 if (bookingPanel && bookingForm) {
-  const bookingEndpoint = window.JV_BOOKING_ENDPOINT || document.querySelector('meta[name="booking-endpoint"]')?.content || "";
+  const bookingEndpoint = getRuntimeEndpoint("JV_BOOKING_ENDPOINT", "booking-endpoint");
   const bookingFields = {
     name: bookingForm.querySelector('[data-booking-field="name"]'),
     company: bookingForm.querySelector('[data-booking-field="company"]'),
@@ -542,11 +627,22 @@ if (bookingPanel && bookingForm) {
       throw new Error("missing_booking_endpoint");
     }
 
-    const response = await fetch(bookingEndpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), requestTimeoutMs);
+    let response;
+
+    try {
+      response = await fetch(bookingEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "omit",
+        signal: controller.signal,
+        body: JSON.stringify(payload),
+      });
+    } finally {
+      window.clearTimeout(timeoutId);
+    }
+
     const data = await response.json().catch(() => ({}));
     if (!response.ok || data.ok === false) {
       const error = new Error(data.error || "booking_request_failed");
@@ -722,6 +818,8 @@ if (bookingPanel && bookingForm) {
       action: "createBooking",
       name: bookingFields.name.value.trim(),
       email: bookingFields.email.value.trim(),
+      company: bookingFields.company?.value.trim() || "",
+      phone: bookingFields.phone?.value.trim() || "",
       problemType: bookingFields.problemType.value,
       message: bookingFields.message.value.trim(),
       startAt: bookingFields.startAt.value,
