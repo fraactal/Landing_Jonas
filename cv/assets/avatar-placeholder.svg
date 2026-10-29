@@ -1,0 +1,12 @@
+<svg width="1200" height="1600" viewBox="0 0 1200 1600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="1600" rx="64" fill="#181B20"/>
+  <rect x="48" y="48" width="1104" height="1504" rx="40" fill="#0F1115" stroke="rgba(212,175,55,0.25)"/>
+  <circle cx="600" cy="528" r="178" fill="#232831" stroke="#C9A227" stroke-width="8"/>
+  <path d="M286 1242C286 1045.94 444.94 887 641 887H559C755.06 887 914 1045.94 914 1242V1330H286V1242Z" fill="#232831"/>
+  <path d="M228 212H458" stroke="#C9A227" stroke-width="20" stroke-linecap="round"/>
+  <path d="M228 274H394" stroke="#F5F5F5" stroke-opacity="0.42" stroke-width="18" stroke-linecap="round"/>
+  <path d="M228 336H352" stroke="#F5F5F5" stroke-opacity="0.26" stroke-width="18" stroke-linecap="round"/>
+  <rect x="228" y="1108" width="326" height="68" rx="34" fill="#C9A227" fill-opacity="0.14" stroke="#C9A227" stroke-opacity="0.3"/>
+  <text x="228" y="1080" fill="#F5F5F5" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700">Jonathan Valdes</text>
+  <text x="228" y="1214" fill="#C9A227" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="600">Software • Middleware • Cloud</text>
+</svg>
