@@ -64,7 +64,7 @@
 .button--primary:hover {
   border-color: var(--color-accent-soft);
   background: var(--color-accent-soft);
-  color: var(--color-bg);
+  color: #ffffff;
 }
 
 .button--secondary {

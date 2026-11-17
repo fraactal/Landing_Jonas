@@ -1,22 +1,21 @@
-# Catálogo de aplicaciones
+# Catálogo de aplicaciones y referencias comerciales
 
-Estado: inventario editorial para M25. La evidencia local y las URLs se revisaron el 17 de noviembre de 2026. Este documento es la referencia de contenido para la sección comercial; no autoriza publicar aplicaciones ni reutilizar datos de clientes.
+Estado: referencia editorial para M25.1. Disponibilidad revisada el 17 de noviembre de 2026. Este inventario no acredita autorización comercial de terceros ni permite reutilizar datos, contenido o marcas ajenas.
 
-| Aplicación | Problema que resuelve | Clasificación | Estado | Tecnologías verificadas | URL / acción | Restricciones |
-| --- | --- | --- | --- | --- | --- | --- |
-| Cera & Aroma | Calcula recetas, lotes y costos para elaboración de velas. | Producto digital | Publicado | React, TypeScript, Vite, PWA, `localStorage` | [Sitio público](https://cera-y-aroma.pages.dev/) verificado | Los datos viven en el navegador; no afirmar sincronización ni cuentas. |
-| Finanzas Claras | Centraliza el seguimiento local de gastos personales. | Producto digital | Desarrollo | FastAPI, React, TypeScript, Vite, SQLite, Docker, Terraform | Conversación comercial | No hay URL pública comprobada; secretos y datos locales quedan fuera. |
-| AutoFlip V2 | Convierte publicaciones de vehículos en información para evaluar compra y reventa. | Producto digital | Desarrollo | Python, API web, SQLite, Docker | Conversación comercial | La fuente V1 es Yapo; no presentar datos de mercado como garantía. |
-| PasoUno | Ayuda a organizar pendientes y enfocar sesiones de trabajo. | Producto digital | Exploración | React Native, Expo, React web, SQLite, PWA | Conversación comercial | La PWA y el piloto aún requieren comprobación completa. |
-| Catálogos HTML a WhatsApp | Presenta productos, carrito y solicitud de pedido para comercios. | Solución para negocios | Demo | JavaScript, Vite, Docker, catálogo estático | Conversación comercial | Las builds y configuraciones por marca no prueban una publicación pública ni autorizan reutilizar datos de clientes. |
-| Vesta 2.0 | Permite consultar y resumir información energética desde un snapshot controlado. | Solución para negocios | Demo | Python, FastAPI, JSON; IA opcional | Conversación comercial | Solo localhost; no publicar datos energéticos ni exponer el servicio sin controles. |
-| Asistente IA con voz | Combina dashboard energético y atención por voz basada en un snapshot aprobado. | Solución para negocios | Demo | HTML, Chart.js, SheetJS | Conversación comercial | El servidor de voz y la prueba end-to-end siguen pendientes. |
-| Fideliza NFC | Explora una propuesta de fidelización para comercios. | Solución para negocios | Exploración | Sin tecnologías verificadas | Conversación comercial | No se encontró una fuente local suficiente; no ofrecer demo ni funcionalidad concreta. |
-| Vesta ESG | Apoya gestión, cálculo y reporte de información de sostenibilidad. | Caso de estudio | Desarrollo | React, CRACO, Chart.js, FastAPI, PostgreSQL | Conversación comercial | Mantener el alcance factual; no exponer datos, informes ni resultados de terceros. |
+| Grupo | Entrada | Estado | Enlace público | Acción en landing | Nota editorial |
+| --- | --- | --- | --- | --- | --- |
+| Catálogos comerciales publicados | Flor y Lumbre | Publicado | Verificado | Ver implementación + CTA grupal | Implementación de catálogo digital con pedidos por WhatsApp. |
+| Catálogos comerciales publicados | ARMATUKIT | Publicado | Verificado | Ver implementación + CTA grupal | Implementación de catálogo digital con pedidos por WhatsApp. |
+| Catálogos comerciales publicados | Conectiva | Publicado, enlace en verificación | No verificable en esta revisión | CTA comercial | No publicar el URL hasta que vuelva a responder y exista autorización confirmada. |
+| Catálogos comerciales publicados | Madre Masa | Publicado | Verificado | Ver implementación + CTA grupal | Implementación de catálogo digital con pedidos por WhatsApp. |
+| Aplicaciones públicas | Cera & Aroma | Publicado | Verificado | Abrir aplicación | Calcula recetas, lotes y costos; no afirmar cuentas ni sincronización. |
+| Aplicaciones públicas | Finanzas Claras | Publicado | Verificado | Abrir aplicación | Herramienta de seguimiento de gastos; no exponer datos ni secretos. |
+| Demostraciones y proyectos tecnológicos | Vesta ESG | Demo, acceso en verificación | No verificable en esta revisión | Conversación comercial | No exponer información energética, ESG ni resultados de terceros. |
+| Demostraciones y proyectos tecnológicos | Vesta 2.0 | Demo privada | Sin URL pública | Evaluar mi proyecto | Asistente IA con voz; una sola entrada, no duplicar sus componentes. |
+| Demostraciones y proyectos tecnológicos | AutoFlip | En desarrollo | Sin URL pública | Conversación comercial | Un solo producto: extensión Marketplace y búsqueda Yapo con estadísticas. |
+| En desarrollo | PasoUno | En desarrollo | Sin URL pública | Conversación comercial | Aplicación local de tareas y productividad. |
+| En desarrollo | Fideliza NFC | En desarrollo | Sin URL pública | Conversación comercial | Plataforma de fidelización con CRM futuro; funcionalidades por validar. |
 
-## Reglas de publicación
+## Regla de autorización
 
-- Una URL solo se incorpora después de una comprobación explícita.
-- Las tarjetas no equivalen a una promesa de disponibilidad comercial ni a un caso contratado.
-- Los datos de clientes, planillas, secretos, ambientes y credenciales permanecen fuera del catálogo.
-- Antes de crear una página de detalle se debe confirmar propietario, estado, material publicable y autorización correspondiente.
+Antes de publicar en producción una referencia de tercero se debe registrar la autorización de su propietario, el nombre que puede mostrarse, el enlace aprobado y la confirmación de que no expone datos privados. La instrucción actual del propietario autoriza preparar el contenido local, no sustituye ese registro.

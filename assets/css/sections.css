@@ -704,6 +704,10 @@
   font-size: var(--font-size-2);
 }
 
+.cases__group-cta {
+  justify-self: start;
+}
+
 .case-card {
   display: grid;
   align-content: start;
@@ -743,7 +747,7 @@
 
 .case-card__status {
   margin: 0;
-  color: var(--color-text);
+  color: var(--color-accent-warm-text);
   font-size: var(--font-size-0);
   font-weight: 700;
 }
@@ -758,6 +762,63 @@
 .case-card__cta {
   justify-self: start;
   margin-block-start: var(--space-2);
+}
+
+.demo-access {
+  display: grid;
+  gap: var(--space-6);
+  border: 1px solid color-mix(in srgb, var(--color-accent-warm) 52%, var(--color-border));
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--color-surface) 88%, var(--color-bg)), color-mix(in srgb, var(--color-surface-muted) 58%, var(--color-surface)));
+  padding: clamp(var(--space-5), 5vw, var(--space-8));
+}
+
+.demo-access__content {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 42rem;
+}
+
+.demo-access__content h3 {
+  font-size: var(--font-size-2);
+}
+
+.demo-access__content p:not(.cases__eyebrow),
+.demo-access__fields p {
+  color: var(--color-muted);
+}
+
+.demo-access__fields {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+}
+
+.demo-access__fields label {
+  color: var(--color-text);
+  font-size: var(--font-size-0);
+  font-weight: 700;
+}
+
+.demo-access__fields input {
+  width: 100%;
+  min-height: 3rem;
+  border: var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-muted);
+  padding: 0.8rem 0.9rem;
+}
+
+.demo-access__fields input:disabled,
+.demo-access__fields button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.demo-access__fields p {
+  margin: 0;
+  font-size: var(--font-size-0);
 }
 
 .case-flow {
@@ -1445,6 +1506,11 @@
 
   .cases__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .demo-access {
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.7fr);
+    align-items: end;
   }
 
   .about__inner {

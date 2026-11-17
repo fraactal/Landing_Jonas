@@ -1,13 +1,17 @@
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
-  --color-bg: #0B0D10;
-  --color-surface: #12161C;
-  --color-text: #F4F6F8;
-  --color-muted: #9AA4B2;
-  --color-accent: #4F7CFF;
-  --color-accent-soft: #8BA7FF;
-  --color-border: #242A33;
+  /* M25.1: canvas, surfaces, typography, borders and actions. */
+  --color-bg: #F5F2EB;
+  --color-surface: #FFFDF9;
+  --color-surface-muted: #E6E0D6;
+  --color-text: #26343C;
+  --color-muted: #53636B;
+  --color-accent: #446D83;
+  --color-accent-soft: #36586B;
+  --color-accent-warm: #C47C5B;
+  --color-accent-warm-text: #955036;
+  --color-border: #CDC6BA;
 
   --font-heading: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
