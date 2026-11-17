@@ -22,7 +22,7 @@
   inset-block-start: 0;
   z-index: var(--z-sticky);
   border-block-end: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
-  background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+  background: color-mix(in srgb, var(--color-surface) 94%, transparent);
   backdrop-filter: blur(14px);
 }
 
@@ -120,6 +120,7 @@
   display: grid;
   align-items: center;
   padding-block: clamp(3.5rem, 8vw, 7rem);
+  background: radial-gradient(circle at 85% 10%, color-mix(in srgb, var(--color-accent) 9%, transparent), transparent 24%), var(--color-bg);
 }
 
 .hero__grid {
@@ -290,6 +291,7 @@
 }
 .problem-selector {
   padding-block: clamp(4.5rem, 10vw, 8rem);
+  background: var(--color-surface);
 }
 
 .problem-selector__inner {
@@ -413,6 +415,7 @@
 }
 .services {
   padding-block: clamp(4.5rem, 10vw, 8rem);
+  background: var(--color-bg);
 }
 
 .services__inner {
@@ -589,7 +592,7 @@
   gap: var(--space-8);
   border: var(--border-subtle);
   border-radius: var(--radius-lg);
-  background: radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--color-accent) 14%, transparent), transparent 34%), color-mix(in srgb, var(--color-surface) 86%, transparent);
+  background: radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--color-accent) 10%, transparent), transparent 34%), var(--color-surface);
   padding: clamp(var(--space-6), 6vw, var(--space-10));
 }
 
@@ -655,6 +658,7 @@
 }
 .cases {
   padding-block: clamp(4.5rem, 10vw, 8rem);
+  background: var(--color-surface);
 }
 
 .cases__inner {
@@ -713,13 +717,14 @@
   align-content: start;
   gap: var(--space-4);
   min-height: 18rem;
-  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+  background: var(--color-surface-elevated);
   transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
 }
 
 .case-card:hover {
   border-color: color-mix(in srgb, var(--color-accent) 48%, var(--color-border));
   background: var(--color-surface);
+  box-shadow: var(--shadow-card-hover);
   transform: translateY(-2px);
 }
 
@@ -747,7 +752,7 @@
 
 .case-card__status {
   margin: 0;
-  color: var(--color-accent-warm-text);
+  color: var(--color-accent-turquoise-text);
   font-size: var(--font-size-0);
   font-weight: 700;
 }
@@ -767,7 +772,7 @@
 .demo-access {
   display: grid;
   gap: var(--space-6);
-  border: 1px solid color-mix(in srgb, var(--color-accent-warm) 52%, var(--color-border));
+  border: 1px solid color-mix(in srgb, var(--color-accent-turquoise) 52%, var(--color-border));
   border-radius: var(--radius-lg);
   background: linear-gradient(135deg, color-mix(in srgb, var(--color-surface) 88%, var(--color-bg)), color-mix(in srgb, var(--color-surface-muted) 58%, var(--color-surface)));
   padding: clamp(var(--space-5), 5vw, var(--space-8));
@@ -855,6 +860,13 @@
 }
 .about {
   padding-block: clamp(4.5rem, 10vw, 8rem);
+  --color-text: var(--color-dark-text);
+  --color-muted: var(--color-dark-muted);
+  --color-border: var(--color-dark-border);
+  --color-surface: var(--color-surface-dark-elevated);
+  --color-surface-elevated: var(--color-surface-dark-elevated);
+  --color-accent-soft: var(--color-accent-turquoise);
+  background: var(--color-surface-dark);
 }
 
 .about__inner {
@@ -920,6 +932,7 @@
 }
 .faq {
   padding-block: clamp(4.5rem, 10vw, 8rem);
+  background: var(--color-bg);
 }
 
 .faq__inner {
@@ -1036,6 +1049,14 @@
 }
 .final-cta {
   padding-block: clamp(4.5rem, 10vw, 8rem);
+  --color-bg: var(--color-surface-dark);
+  --color-text: var(--color-dark-text);
+  --color-muted: var(--color-dark-muted);
+  --color-border: var(--color-dark-border);
+  --color-surface: var(--color-surface-dark-elevated);
+  --color-surface-elevated: var(--color-surface-dark-elevated);
+  --color-accent-soft: var(--color-accent-turquoise);
+  background: var(--color-surface-dark);
 }
 
 .final-cta__shell {
@@ -1177,15 +1198,15 @@
 .contact-field input:focus,
 .contact-field select:focus,
 .contact-field textarea:focus {
-  border-color: var(--color-accent-soft);
-  outline: 2px solid color-mix(in srgb, var(--color-accent) 55%, transparent);
+  border-color: var(--color-focus);
+  outline: 2px solid color-mix(in srgb, var(--color-focus) 55%, transparent);
   outline-offset: 2px;
 }
 
 .contact-field.is-invalid input,
 .contact-field.is-invalid select,
 .contact-field.is-invalid textarea {
-  border-color: color-mix(in srgb, #ff6b6b 72%, var(--color-border));
+  border-color: var(--color-error);
 }
 
 .contact-field__help,
@@ -1201,7 +1222,7 @@
 
 .contact-field__error {
   min-height: 1.35em;
-  color: #ffb4b4;
+  color: var(--color-error);
   font-weight: 700;
 }
 
@@ -1258,6 +1279,11 @@
 .site-footer {
   border-block-start: var(--border-subtle);
   padding-block: var(--space-8);
+  --color-text: var(--color-dark-text);
+  --color-muted: var(--color-dark-muted);
+  --color-border: var(--color-dark-border);
+  --color-accent-soft: var(--color-accent-turquoise);
+  background: var(--color-surface-dark);
 }
 
 .site-footer__inner {
