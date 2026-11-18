@@ -202,10 +202,16 @@
             </div>
 
             <aside class="problem-detail" id="problem-selector-detail" aria-labelledby="problem-detail-title">
-              <h3 id="problem-detail-title" data-problem-detail-title>Selecciona una opción</h3>
-              <p data-problem-detail-copy>Selecciona una opción para explorar cómo podemos ayudarte.</p>
-              <p class="problem-detail__solution" data-problem-detail-solution hidden></p>
-              <a class="button button--primary problem-detail__cta" href="#contacto" data-problem-detail-cta hidden>Conversemos sobre esta solución</a>
+              <p class="problem-detail__initial" data-problem-detail-initial><span class="problem-detail__initial-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="m5 3 3 10 10 3-10 3-3 5 1-8-4-4 5-1-2-4Z"></path></svg></span>Selecciona una opción para descubrir cómo podemos ayudarte.</p>
+              <div class="problem-detail__selected" data-problem-detail-selected hidden>
+                <span class="problem-detail__icon" aria-hidden="true" data-problem-detail-icon></span>
+                <div class="problem-detail__body">
+                  <h3 id="problem-detail-title" data-problem-detail-title>Selecciona una opción</h3>
+                  <p data-problem-detail-copy>Selecciona una opción para explorar cómo podemos ayudarte.</p>
+                  <p class="problem-detail__solution" data-problem-detail-solution></p>
+                </div>
+                <a class="button button--primary problem-detail__cta" href="#contacto" data-problem-detail-cta>Conversemos sobre esta solución</a>
+              </div>
             </aside>
           </div>
         </div>

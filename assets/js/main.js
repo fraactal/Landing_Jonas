@@ -102,6 +102,9 @@ const problemDetailTitle = document.querySelector("[data-problem-detail-title]")
 const problemDetailCopy = document.querySelector("[data-problem-detail-copy]");
 const problemDetailSolution = document.querySelector("[data-problem-detail-solution]");
 const problemDetailCta = document.querySelector("[data-problem-detail-cta]");
+const problemDetailInitial = document.querySelector("[data-problem-detail-initial]");
+const problemDetailSelected = document.querySelector("[data-problem-detail-selected]");
+const problemDetailIcon = document.querySelector("[data-problem-detail-icon]");
 const problemDetail = document.querySelector(".problem-detail");
 const whatsappBaseUrl = "https://wa.me/56931367372?text=";
 const fallbackWhatsappMessage = "Hola Jonathan, vi tu sitio y quiero conversar sobre un problema tecnológico en mi empresa.";
@@ -112,7 +115,7 @@ const contactForm = document.querySelector("[data-contact-form]");
 const contactProblemType = document.querySelector("[data-contact-field=\"problemType\"]");
 const contactSourceContext = document.querySelector("[data-contact-source-context]");
 
-if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemDetailSolution && problemDetailCta && problemDetail) {
+if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemDetailSolution && problemDetailCta && problemDetail && problemDetailInitial && problemDetailSelected && problemDetailIcon) {
   let selectedProblemKey = "";
 
   const problemOptionToFormValue = {
@@ -169,6 +172,17 @@ if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemD
     },
   };
 
+  const problemIcons = {
+    automation: '<svg viewBox="0 0 24 24" focusable="false"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"></path></svg>',
+    app: '<svg viewBox="0 0 24 24" focusable="false"><path d="m8 7-5 5 5 5"></path><path d="m16 7 5 5-5 5"></path><path d="m14 4-4 16"></path></svg>',
+    integration: '<svg viewBox="0 0 24 24" focusable="false"><path d="m10.5 13.5 3-3"></path><path d="m7.8 16.2-1.5 1.5a3.5 3.5 0 0 1-5-5l3.2-3.2a3.5 3.5 0 0 1 5 0"></path><path d="m16.2 7.8 1.5-1.5a3.5 3.5 0 1 1 5 5l-3.2 3.2a3.5 3.5 0 0 1-5 0"></path></svg>',
+    data: '<svg viewBox="0 0 24 24" focusable="false"><path d="M5 19V11"></path><path d="M11 19V5"></path><path d="M17 19v-8"></path><path d="M3 19h18"></path></svg>',
+    infrastructure: '<svg viewBox="0 0 24 24" focusable="false"><path d="M7 18h10a4 4 0 0 0 .5-7.97A5.5 5.5 0 0 0 7.16 8.2 4.9 4.9 0 0 0 7 18Z"></path></svg>',
+    quality: '<svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="8.5"></circle><path d="m8.2 12.1 2.5 2.6 5.2-5.5"></path></svg>',
+    monitoring: '<svg viewBox="0 0 24 24" focusable="false"><path d="M3 12h4l2.2-5 4 10 2.2-5H21"></path></svg>',
+    unsure: '<svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="8.5"></circle><path d="M9.8 9.4a2.4 2.4 0 1 1 4.1 1.7c-.9.8-1.9 1.3-1.9 2.9"></path><path d="M12 17.5h.01"></path></svg>',
+  };
+
   const setSelectedProblem = (selectedButton) => {
     const content = problemContent[selectedButton.dataset.problemOption] || {
       title: selectedButton.textContent.trim() || "Cuéntame tu caso",
@@ -189,8 +203,9 @@ if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemD
       problemDetailTitle.textContent = content.title;
       problemDetailCopy.textContent = content.description;
       problemDetailSolution.textContent = content.solution;
-      problemDetailSolution.hidden = false;
-      problemDetailCta.hidden = false;
+      problemDetailIcon.innerHTML = problemIcons[selectedProblemKey] || "";
+      problemDetailInitial.hidden = true;
+      problemDetailSelected.hidden = false;
       problemDetail.classList.remove("is-changing");
     }, 120);
   };
