@@ -597,11 +597,9 @@
 }
 
 .poc__shell {
-  display: grid;
-  gap: var(--space-8);
-  border: var(--border-subtle);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 22%, var(--color-border));
   border-radius: var(--radius-lg);
-  background: radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--color-accent) 10%, transparent), transparent 34%), var(--color-surface);
+  background: var(--color-surface);
   padding: clamp(var(--space-6), 6vw, var(--space-10));
 }
 
@@ -628,42 +626,6 @@
 .poc__cta {
   justify-self: start;
   margin-block-start: var(--space-2);
-}
-
-.poc__visual {
-  display: grid;
-  align-content: center;
-}
-
-.poc-flow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-3);
-}
-
-.poc-flow__node {
-  display: inline-flex;
-  min-height: 3rem;
-  align-items: center;
-  justify-content: center;
-  border: var(--border-subtle);
-  border-radius: var(--radius-sm);
-  background: color-mix(in srgb, var(--color-bg) 58%, var(--color-surface));
-  color: var(--color-text);
-  font-family: var(--font-heading);
-  font-size: var(--font-size-0);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  padding: var(--space-3) var(--space-4);
-}
-
-.poc-flow__arrow {
-  color: var(--color-accent-soft);
-  font-family: var(--font-heading);
-  font-size: var(--font-size-2);
-  font-weight: 700;
-  line-height: 1;
 }
 .cases {
   padding-block: clamp(4.5rem, 10vw, 8rem);
@@ -1563,15 +1525,6 @@
     margin-block-start: clamp(2rem, 3vw, 3.25rem);
   }
 
-
-  .poc__shell {
-    grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.85fr);
-    align-items: center;
-  }
-
-  .poc-flow {
-    justify-content: flex-end;
-  }
 
   .cases__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
