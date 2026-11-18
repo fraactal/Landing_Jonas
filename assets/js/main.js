@@ -217,12 +217,21 @@ if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemD
 const serviceOptions = document.querySelectorAll("[data-service-option]");
 const servicePanel = document.querySelector("[data-service-panel]");
 const servicePanelIcon = document.querySelector("[data-service-panel-icon]");
-const servicePanelLabel = document.querySelector("[data-service-panel-label]");
 const servicePanelTitle = document.querySelector("[data-service-panel-title]");
 const servicePanelDescription = document.querySelector("[data-service-panel-description]");
 const servicePanelBenefit = document.querySelector("[data-service-panel-benefit]");
 
-if (serviceOptions.length && servicePanel && servicePanelIcon && servicePanelLabel && servicePanelTitle && servicePanelDescription && servicePanelBenefit) {
+if (serviceOptions.length && servicePanel && servicePanelIcon && servicePanelTitle && servicePanelDescription && servicePanelBenefit) {
+  const serviceIcons = {
+    applications: '<svg viewBox="0 0 24 24" focusable="false"><path d="m8 7-5 5 5 5"></path><path d="m16 7 5 5-5 5"></path><path d="m14 4-4 16"></path></svg>',
+    automation: '<svg viewBox="0 0 24 24" focusable="false"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"></path></svg>',
+    integrations: '<svg viewBox="0 0 24 24" focusable="false"><path d="m10.5 13.5 3-3"></path><path d="m7.8 16.2-1.5 1.5a3.5 3.5 0 0 1-5-5l3.2-3.2a3.5 3.5 0 0 1 5 0"></path><path d="m16.2 7.8 1.5-1.5a3.5 3.5 0 1 1 5 5l-3.2 3.2a3.5 3.5 0 0 1-5 0"></path></svg>',
+    infrastructure: '<svg viewBox="0 0 24 24" focusable="false"><path d="M7 18h10a4 4 0 0 0 .5-7.97A5.5 5.5 0 0 0 7.16 8.2 4.9 4.9 0 0 0 7 18Z"></path><path d="M12 11v5"></path><path d="m10 13 2-2 2 2"></path></svg>',
+    quality: '<svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="8.5"></circle><path d="m8.2 12.1 2.5 2.6 5.2-5.5"></path></svg>',
+    data: '<svg viewBox="0 0 24 24" focusable="false"><path d="M5 19V11"></path><path d="M11 19V5"></path><path d="M17 19v-8"></path><path d="M3 19h18"></path></svg>',
+    monitoring: '<svg viewBox="0 0 24 24" focusable="false"><path d="M3 12h4l2.2-5 4 10 2.2-5H21"></path></svg>',
+  };
+
   const setSelectedService = (selectedOption, shouldFocus = false) => {
     serviceOptions.forEach((option) => {
       const isSelected = option === selectedOption;
@@ -232,15 +241,10 @@ if (serviceOptions.length && servicePanel && servicePanelIcon && servicePanelLab
     });
 
     servicePanel.setAttribute("aria-labelledby", selectedOption.id);
-    servicePanelLabel.textContent = `Solución ${selectedOption.dataset.serviceNumber}`;
     servicePanelTitle.textContent = selectedOption.querySelector(".service-explorer__title")?.textContent.trim() || "Solución";
     servicePanelDescription.textContent = selectedOption.dataset.serviceDescription || "";
     servicePanelBenefit.textContent = selectedOption.dataset.serviceBenefit || "";
-    const icon = selectedOption.querySelector("svg");
-
-    if (icon) {
-      servicePanelIcon.replaceChildren(icon.cloneNode(true));
-    }
+    servicePanelIcon.innerHTML = serviceIcons[selectedOption.dataset.serviceOption] || "";
 
     if (shouldFocus) {
       selectedOption.focus();
