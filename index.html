@@ -218,68 +218,26 @@
             <p>Combinamos las capacidades necesarias para resolver un problema concreto. No necesitas llegar con la tecnología definida: primero entendemos lo que ocurre y luego proponemos un camino proporcional.</p>
           </div>
 
-          <div class="services__grid" aria-label="Servicios disponibles">
-            <article class="card service-card">
-              <div class="service-card__header">
-                <p class="service-card__number">01</p>
-                <span class="service-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="m8 7-5 5 5 5"></path><path d="m16 7 5 5-5 5"></path><path d="m14 4-4 16"></path></svg></span>
-              </div>
-              <h3>Aplicaciones a medida</h3>
-              <p>Aplicaciones, sistemas internos, APIs y MVP para convertir una necesidad concreta en una herramienta útil para tu equipo o clientes.</p>
-            </article>
+          <div class="services__explorer">
+            <div class="service-explorer__list" role="tablist" aria-label="Soluciones disponibles" aria-orientation="vertical">
+              <button class="service-explorer__option is-active" type="button" id="service-tab-applications" role="tab" aria-selected="true" aria-controls="service-panel" tabindex="0" data-service-option="applications" data-service-number="01" data-service-description="Aplicaciones, sistemas internos, APIs y MVP para convertir una necesidad concreta en una herramienta útil para tu equipo o clientes." data-service-benefit="Una herramienta pensada para el trabajo que necesitas resolver."><span class="service-explorer__number">01</span><span class="service-explorer__title">Aplicaciones a medida</span><span class="service-explorer__state">Activa</span><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="m8 7-5 5 5 5"></path><path d="m16 7 5 5-5 5"></path><path d="m14 4-4 16"></path></svg></button>
 
-            <article class="card service-card">
-              <div class="service-card__header">
-                <p class="service-card__number">02</p>
-                <span class="service-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"></path></svg></span>
-              </div>
-              <h3>Automatización e IA aplicada</h3>
-              <p>Reducimos pasos manuales y ordenamos tareas repetitivas, usando IA cuando aporta una mejora concreta al proceso.</p>
-            </article>
+              <button class="service-explorer__option" type="button" id="service-tab-automation" role="tab" aria-selected="false" aria-controls="service-panel" tabindex="-1" data-service-option="automation" data-service-number="02" data-service-description="Reducimos pasos manuales y ordenamos tareas repetitivas, usando IA cuando aporta una mejora concreta al proceso." data-service-benefit="Más tiempo para revisar lo que realmente requiere criterio."><span class="service-explorer__number">02</span><span class="service-explorer__title">Automatización e IA aplicada</span><span class="service-explorer__state">Activa</span><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"></path></svg></button>
 
-            <article class="card service-card">
-              <div class="service-card__header">
-                <p class="service-card__number">03</p>
-                <span class="service-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="m10.5 13.5 3-3"></path><path d="m7.8 16.2-1.5 1.5a3.5 3.5 0 0 1-5-5l3.2-3.2a3.5 3.5 0 0 1 5 0"></path><path d="m16.2 7.8 1.5-1.5a3.5 3.5 0 1 1 5 5l-3.2 3.2a3.5 3.5 0 0 1-5 0"></path></svg></span>
-              </div>
-              <h3>Sistemas conectados</h3>
-              <p>Hacemos que las herramientas, datos y servicios que ya usas compartan información sin depender de pasos duplicados.</p>
-            </article>
+              <button class="service-explorer__option" type="button" id="service-tab-integrations" role="tab" aria-selected="false" aria-controls="service-panel" tabindex="-1" data-service-option="integrations" data-service-number="03" data-service-description="Hacemos que las herramientas, datos y servicios que ya usas compartan información sin depender de pasos duplicados." data-service-benefit="Información disponible donde hace falta, con menos trabajo manual."><span class="service-explorer__number">03</span><span class="service-explorer__title">Sistemas conectados</span><span class="service-explorer__state">Activa</span><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="m10.5 13.5 3-3"></path><path d="m7.8 16.2-1.5 1.5a3.5 3.5 0 0 1-5-5l3.2-3.2a3.5 3.5 0 0 1 5 0"></path><path d="m16.2 7.8 1.5-1.5a3.5 3.5 0 1 1 5 5l-3.2 3.2a3.5 3.5 0 0 1-5 0"></path></svg></button>
 
-            <article class="card service-card">
-              <div class="service-card__header">
-                <p class="service-card__number">04</p>
-                <span class="service-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M7 18h10a4 4 0 0 0 .5-7.97A5.5 5.5 0 0 0 7.16 8.2 4.9 4.9 0 0 0 7 18Z"></path><path d="M12 11v5"></path><path d="m10 13 2-2 2 2"></path></svg></span>
-              </div>
-              <h3>Infraestructura lista para operar</h3>
-              <p>Preparamos entornos cloud, despliegues y prácticas DevOps para que una solución pueda construirse, publicarse y mantenerse con orden.</p>
-            </article>
+              <button class="service-explorer__option" type="button" id="service-tab-infrastructure" role="tab" aria-selected="false" aria-controls="service-panel" tabindex="-1" data-service-option="infrastructure" data-service-number="04" data-service-description="Preparamos entornos cloud, despliegues y prácticas DevOps para que una solución pueda construirse, publicarse y mantenerse con orden." data-service-benefit="Una base más clara para operar y evolucionar tu solución."><span class="service-explorer__number">04</span><span class="service-explorer__title">Infraestructura lista para operar</span><span class="service-explorer__state">Activa</span><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M7 18h10a4 4 0 0 0 .5-7.97A5.5 5.5 0 0 0 7.16 8.2 4.9 4.9 0 0 0 7 18Z"></path><path d="M12 11v5"></path><path d="m10 13 2-2 2 2"></path></svg></button>
 
-            <article class="card service-card">
-              <div class="service-card__header">
-                <p class="service-card__number">05</p>
-                <span class="service-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="8.5"></circle><path d="m8.2 12.1 2.5 2.6 5.2-5.5"></path></svg></span>
-              </div>
-              <h3>Calidad antes de publicar</h3>
-              <p>Revisamos los flujos importantes con pruebas y controles para detectar problemas antes de que afecten a las personas usuarias.</p>
-            </article>
+              <button class="service-explorer__option" type="button" id="service-tab-quality" role="tab" aria-selected="false" aria-controls="service-panel" tabindex="-1" data-service-option="quality" data-service-number="05" data-service-description="Revisamos los flujos importantes con pruebas y controles para detectar problemas antes de que afecten a las personas usuarias." data-service-benefit="Más confianza para publicar cambios importantes."><span class="service-explorer__number">05</span><span class="service-explorer__title">Calidad antes de publicar</span><span class="service-explorer__state">Activa</span><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="8.5"></circle><path d="m8.2 12.1 2.5 2.6 5.2-5.5"></path></svg></button>
 
-            <article class="card service-card">
-              <div class="service-card__header">
-                <p class="service-card__number">06</p>
-                <span class="service-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 19V11"></path><path d="M11 19V5"></path><path d="M17 19v-8"></path><path d="M3 19h18"></path></svg></span>
-              </div>
-              <h3>Datos para decidir</h3>
-              <p>Ordenamos, conectamos y presentamos datos para que puedas entender mejor lo que ocurre y apoyar decisiones cotidianas.</p>
-            </article>
+              <button class="service-explorer__option" type="button" id="service-tab-data" role="tab" aria-selected="false" aria-controls="service-panel" tabindex="-1" data-service-option="data" data-service-number="06" data-service-description="Ordenamos, conectamos y presentamos datos para que puedas entender mejor lo que ocurre y apoyar decisiones cotidianas." data-service-benefit="Información más clara para conversar y decidir."><span class="service-explorer__number">06</span><span class="service-explorer__title">Datos para decidir</span><span class="service-explorer__state">Activa</span><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M5 19V11"></path><path d="M11 19V5"></path><path d="M17 19v-8"></path><path d="M3 19h18"></path></svg></button>
 
-            <article class="card service-card">
-              <div class="service-card__header">
-                <p class="service-card__number">07</p>
-                <span class="service-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M3 12h4l2.2-5 4 10 2.2-5H21"></path></svg></span>
-              </div>
-              <h3>Monitoreo y visibilidad</h3>
-              <p>Definimos métricas, alertas y paneles para saber cómo está funcionando una solución y dónde conviene revisar.</p>
+              <button class="service-explorer__option" type="button" id="service-tab-monitoring" role="tab" aria-selected="false" aria-controls="service-panel" tabindex="-1" data-service-option="monitoring" data-service-number="07" data-service-description="Definimos métricas, alertas y paneles para saber cómo está funcionando una solución y dónde conviene revisar." data-service-benefit="Señales claras para entender qué necesita atención."><span class="service-explorer__number">07</span><span class="service-explorer__title">Monitoreo y visibilidad</span><span class="service-explorer__state">Activa</span><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M3 12h4l2.2-5 4 10 2.2-5H21"></path></svg></button>
+            </div>
+            <article class="service-explorer__panel" id="service-panel" role="tabpanel" aria-labelledby="service-tab-applications" tabindex="0" data-service-panel>
+              <span class="service-explorer__panel-icon" aria-hidden="true" data-service-panel-icon><svg viewBox="0 0 24 24" focusable="false"><path d="m8 7-5 5 5 5"></path><path d="m16 7 5 5-5 5"></path><path d="m14 4-4 16"></path></svg></span>
+              <p class="service-explorer__label" data-service-panel-label>Solución 01</p><h3 data-service-panel-title>Aplicaciones a medida</h3><p class="service-explorer__description" data-service-panel-description>Aplicaciones, sistemas internos, APIs y MVP para convertir una necesidad concreta en una herramienta útil para tu equipo o clientes.</p>
+              <footer class="service-explorer__benefit"><p>Beneficio</p><strong data-service-panel-benefit>Una herramienta pensada para el trabajo que necesitas resolver.</strong></footer>
             </article>
           </div>
         </div>

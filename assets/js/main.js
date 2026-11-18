@@ -213,6 +213,52 @@ if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemD
     }
   });
 }
+
+const serviceOptions = document.querySelectorAll("[data-service-option]");
+const servicePanel = document.querySelector("[data-service-panel]");
+const servicePanelIcon = document.querySelector("[data-service-panel-icon]");
+const servicePanelLabel = document.querySelector("[data-service-panel-label]");
+const servicePanelTitle = document.querySelector("[data-service-panel-title]");
+const servicePanelDescription = document.querySelector("[data-service-panel-description]");
+const servicePanelBenefit = document.querySelector("[data-service-panel-benefit]");
+
+if (serviceOptions.length && servicePanel && servicePanelIcon && servicePanelLabel && servicePanelTitle && servicePanelDescription && servicePanelBenefit) {
+  const setSelectedService = (selectedOption, shouldFocus = false) => {
+    serviceOptions.forEach((option) => {
+      const isSelected = option === selectedOption;
+      option.classList.toggle("is-active", isSelected);
+      option.setAttribute("aria-selected", String(isSelected));
+      option.tabIndex = isSelected ? 0 : -1;
+    });
+
+    servicePanel.setAttribute("aria-labelledby", selectedOption.id);
+    servicePanelLabel.textContent = `Solución ${selectedOption.dataset.serviceNumber}`;
+    servicePanelTitle.textContent = selectedOption.querySelector(".service-explorer__title")?.textContent.trim() || "Solución";
+    servicePanelDescription.textContent = selectedOption.dataset.serviceDescription || "";
+    servicePanelBenefit.textContent = selectedOption.dataset.serviceBenefit || "";
+    const icon = selectedOption.querySelector("svg");
+
+    if (icon) {
+      servicePanelIcon.replaceChildren(icon.cloneNode(true));
+    }
+
+    if (shouldFocus) {
+      selectedOption.focus();
+    }
+  };
+
+  serviceOptions.forEach((option, index) => {
+    option.addEventListener("click", () => setSelectedService(option));
+    option.addEventListener("keydown", (event) => {
+      const navigationKeys = ["ArrowDown", "ArrowRight", "ArrowUp", "ArrowLeft", "Home", "End"];
+      if (!navigationKeys.includes(event.key)) return;
+
+      event.preventDefault();
+      const nextIndex = event.key === "Home" ? 0 : event.key === "End" ? serviceOptions.length - 1 : (index + (event.key === "ArrowDown" || event.key === "ArrowRight" ? 1 : -1) + serviceOptions.length) % serviceOptions.length;
+      setSelectedService(serviceOptions[nextIndex], true);
+    });
+  });
+}
 const processScrolly = document.querySelector("[data-process-scrolly]");
 
 if (processScrolly && "IntersectionObserver" in window) {
