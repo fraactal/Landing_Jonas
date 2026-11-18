@@ -1584,12 +1584,25 @@
   }
 
   .hero__grid {
-    grid-template-columns: minmax(0, 3fr) minmax(18rem, 2fr);
-    align-items: center;
+    grid-template-columns: minmax(0, 2.9fr) minmax(25rem, 2.1fr);
+    align-items: start;
   }
 
   .hero__content {
-    max-width: 43rem;
+    max-width: 41rem;
+  }
+
+  .hero {
+    padding-block: clamp(3rem, 6.5vw, 5.875rem);
+  }
+
+  .hero h1 {
+    max-width: 11.5ch;
+    font-size: clamp(2.4rem, 4.55vw, 4.25rem);
+  }
+
+  .hero-flow {
+    margin-block-start: clamp(2rem, 3vw, 3.25rem);
   }
 
 
