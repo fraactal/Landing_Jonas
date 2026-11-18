@@ -369,7 +369,7 @@
 .problem-option {
   display: grid;
   min-height: 5.5rem;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   gap: var(--space-3);
   border: var(--border-subtle);
@@ -399,10 +399,6 @@
   color: #ffffff;
 }
 
-.problem-option[aria-pressed="true"] .problem-option__status {
-  display: inline-flex;
-}
-
 .problem-option__number {
   display: inline-grid;
   width: 2.35rem;
@@ -421,20 +417,6 @@
   font-size: var(--font-size-1);
   font-weight: 700;
   line-height: var(--line-height-heading);
-}
-
-.problem-option__status {
-  display: none;
-  align-items: center;
-  min-height: 1.75rem;
-  border: 1px solid var(--color-accent);
-  border-radius: 999px;
-  color: var(--color-accent-soft);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  line-height: 1;
-  padding: 0 var(--space-2);
-  white-space: nowrap;
 }
 
 .problem-detail {
