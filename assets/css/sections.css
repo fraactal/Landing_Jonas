@@ -28,20 +28,55 @@
 
 .site-header__inner {
   display: flex;
-  min-height: 4.25rem;
+  min-height: 5rem;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .site-brand {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+}
+
+.site-brand__monogram {
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: -0.08em;
+}
+
+.site-brand__monogram span {
+  color: var(--color-accent-turquoise);
+}
+
+.site-brand__identity {
+  display: grid;
+  min-width: 0;
+  gap: 0.0625rem;
+}
+
+.site-brand__name {
   color: var(--color-text);
   font-family: var(--font-heading);
-  font-size: var(--font-size-2);
-  font-weight: 700;
-  letter-spacing: 0;
-  text-decoration: none;
+  font-size: 0.9375rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.site-brand__descriptor {
+  color: var(--color-muted);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
   white-space: nowrap;
 }
 
@@ -102,6 +137,7 @@
   inset-block-start: calc(100% + 1px);
   inset-inline: var(--container-gutter);
   display: grid;
+  width: auto;
   gap: var(--space-3);
   border: var(--border-subtle);
   border-radius: var(--radius-md);
@@ -129,8 +165,8 @@
 }
 
 .hero__content {
-  --flow-space: var(--space-5);
-  max-width: 44rem;
+  --flow-space: var(--space-6);
+  max-width: 42rem;
 }
 
 .hero__eyebrow {
@@ -150,12 +186,21 @@
 }
 
 .hero__description {
-  max-width: 42rem;
-  font-size: var(--font-size-2);
+  max-width: 38rem;
+  color: var(--color-muted);
+  font-size: clamp(1.0625rem, 1.8vw, 1.25rem);
+}
+
+.hero h1 {
+  max-width: 12ch;
+  font-size: clamp(2.4rem, 5vw, 4.65rem);
+  letter-spacing: -0.04em;
+  text-wrap: balance;
 }
 
 .hero__actions {
   --cluster-gap: var(--space-3);
+  margin-block-start: var(--space-2);
 }
 
 .hero__support {
@@ -1470,6 +1515,23 @@
 }
 @media (min-width: 48rem) {
 
+  .site-header__inner {
+    min-height: 5.25rem;
+    gap: var(--space-6);
+  }
+
+  .site-brand {
+    gap: var(--space-4);
+  }
+
+  .site-brand__name {
+    font-size: 1rem;
+  }
+
+  .site-brand__descriptor {
+    font-size: 0.6875rem;
+  }
+
   .final-cta__actions .button {
     width: auto;
   }
@@ -1518,6 +1580,10 @@
   .hero__grid {
     grid-template-columns: minmax(0, 3fr) minmax(18rem, 2fr);
     align-items: center;
+  }
+
+  .hero__content {
+    max-width: 43rem;
   }
 
 
