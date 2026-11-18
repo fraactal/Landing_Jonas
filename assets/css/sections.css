@@ -597,20 +597,23 @@
 }
 
 .poc__shell {
-  border: 1px solid color-mix(in srgb, var(--color-accent) 22%, var(--color-border));
+  display: grid;
+  gap: var(--space-8);
+  border: 1px solid var(--color-dark-border);
   border-radius: var(--radius-lg);
-  background: var(--color-surface);
+  background: var(--color-surface-dark);
+  color: var(--color-dark-text);
   padding: clamp(var(--space-6), 6vw, var(--space-10));
 }
 
 .poc__content {
   --flow-space: var(--space-4);
-  max-width: 44rem;
+  max-width: 34rem;
 }
 
 .poc__eyebrow {
   margin: 0;
-  color: var(--color-accent-soft);
+  color: var(--color-accent-turquoise);
   font-size: var(--font-size-0);
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -619,7 +622,7 @@
 
 .poc__content p:not(.poc__eyebrow) {
   max-width: 42rem;
-  color: var(--color-muted);
+  color: var(--color-dark-muted);
   font-size: var(--font-size-1);
 }
 
@@ -627,6 +630,13 @@
   justify-self: start;
   margin-block-start: var(--space-2);
 }
+.poc__examples { display: grid; gap: var(--space-3); }
+.poc__example { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-3); align-items: start; border: 1px solid rgb(255 255 255 / 8%); border-radius: var(--radius-md); background: var(--color-surface-dark-elevated); padding: var(--space-4); }
+.poc__example svg { width: 1.4rem; height: 1.4rem; margin-top: 0.15rem; fill: none; stroke: var(--color-accent-turquoise); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
+.poc__example h3, .poc__example p { margin: 0; }
+.poc__example h3 { color: #FFFFFF; font-size: var(--font-size-1); line-height: var(--line-height-heading); }
+.poc__example p { color: var(--color-dark-muted); font-size: var(--font-size-0); }
+@media (min-width: 48rem) { .poc__shell { grid-template-columns: minmax(0, 0.9fr) minmax(20rem, 1.1fr); align-items: center; } }
 .cases {
   padding-block: clamp(4.5rem, 10vw, 8rem);
   background: var(--color-surface);
