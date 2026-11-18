@@ -288,8 +288,6 @@
 
 .problem-prompt__dynamic {
   display: grid;
-  min-height: 2.4em;
-  align-items: center;
   margin: 0;
   color: var(--color-text);
   font-family: var(--font-heading);
@@ -300,6 +298,20 @@
   overflow-wrap: anywhere;
   text-wrap: balance;
   transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.problem-prompt__dynamic-reserve,
+.problem-prompt__dynamic-current {
+  grid-area: 1 / 1;
+  align-self: center;
+}
+
+.problem-prompt__dynamic-reserve {
+  visibility: hidden;
+}
+
+.problem-prompt__dynamic-current {
+  justify-self: center;
 }
 
 .problem-prompt__dynamic.is-changing {
@@ -1632,9 +1644,6 @@
     gap: var(--space-5);
   }
 
-  .problem-prompt__dynamic {
-    min-height: 1.2em;
-  }
   .problem-selector__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
