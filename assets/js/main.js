@@ -100,6 +100,7 @@ if (dynamicProblem) {
 const problemOptions = document.querySelectorAll("[data-problem-option]");
 const problemDetailTitle = document.querySelector("[data-problem-detail-title]");
 const problemDetailCopy = document.querySelector("[data-problem-detail-copy]");
+const problemDetailSolution = document.querySelector("[data-problem-detail-solution]");
 const problemDetailCta = document.querySelector("[data-problem-detail-cta]");
 const problemDetail = document.querySelector(".problem-detail");
 const whatsappBaseUrl = "https://wa.me/56931367372?text=";
@@ -109,10 +110,11 @@ const requestTimeoutMs = 12000;
 const getRuntimeEndpoint = (globalName, metaName) => window[globalName] || document.querySelector(`meta[name="${metaName}"]`)?.content.trim() || "";
 const contactForm = document.querySelector("[data-contact-form]");
 const contactProblemType = document.querySelector("[data-contact-field=\"problemType\"]");
-const bookingProblemType = document.querySelector("[data-booking-field=\"problemType\"]");
 const contactSourceContext = document.querySelector("[data-contact-source-context]");
 
-if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemDetailCta && problemDetail) {
+if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemDetailSolution && problemDetailCta && problemDetail) {
+  let selectedProblemKey = "";
+
   const problemOptionToFormValue = {
     automation: "Automatizar un proceso",
     app: "Crear una aplicación",
@@ -128,42 +130,42 @@ if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemD
     automation: {
       title: "Automatizar un proceso",
       description: "Podemos ayudarte a identificar tareas repetitivas, diseñar el flujo y evaluar qué partes pueden automatizarse sin complicar innecesariamente la operación.",
-      whatsappMessage: "Hola Jonathan, quiero conversar sobre automatizar un proceso en mi empresa.",
+      solution: "Propuesta: revisar el proceso y definir un primer flujo acotado para automatizar.",
     },
     app: {
       title: "Crear una aplicación",
       description: "Podemos ayudarte a definir, diseñar y construir una aplicación, sistema interno, API o MVP que resuelva una necesidad concreta sin sobredimensionar el proyecto.",
-      whatsappMessage: "Hola Jonathan, quiero conversar sobre crear una aplicación en mi empresa.",
+      solution: "Propuesta: definir un alcance inicial claro para una aplicación, sistema interno, API o MVP.",
     },
     integration: {
       title: "Conectar sistemas",
       description: "Podemos ayudarte a integrar plataformas, APIs, bases de datos o servicios que hoy funcionan separados para que la información fluya con menos trabajo manual.",
-      whatsappMessage: "Hola Jonathan, quiero conversar sobre conectar sistemas en mi empresa.",
+      solution: "Propuesta: revisar los sistemas involucrados y diseñar una integración proporcional al caso.",
     },
     data: {
-      title: "Trabajar con mis datos",
+      title: "Trabajar con datos",
       description: "Podemos ayudarte a consolidar, transformar y visualizar datos mediante reportes, dashboards o flujos que apoyen mejores decisiones del negocio.",
-      whatsappMessage: "Hola Jonathan, quiero conversar sobre trabajar con mis datos en mi empresa.",
+      solution: "Propuesta: ordenar las fuentes prioritarias y definir un primer reporte, dashboard o flujo de datos.",
     },
     infrastructure: {
       title: "Mejorar infraestructura",
       description: "Podemos ayudarte a ordenar despliegues, cloud, Docker, CI/CD y automatización para que tu infraestructura sea más confiable y fácil de operar.",
-      whatsappMessage: "Hola Jonathan, quiero conversar sobre mejorar infraestructura en mi empresa.",
+      solution: "Propuesta: identificar el punto operativo más crítico y plantear una mejora gradual de infraestructura.",
     },
     quality: {
       title: "Mejorar calidad",
       description: "Podemos ayudarte a reducir errores con pruebas funcionales, automatización, regresión y controles que den más confianza antes de publicar cambios.",
-      whatsappMessage: "Hola Jonathan, quiero conversar sobre mejorar calidad en mi empresa.",
+      solution: "Propuesta: acordar un conjunto inicial de pruebas y controles antes de publicar cambios.",
     },
     monitoring: {
       title: "Mejorar monitoreo / visibilidad",
       description: "Podemos ayudarte a implementar métricas, logs, alertas y dashboards para entender qué está ocurriendo en tus sistemas y operación.",
-      whatsappMessage: "Hola Jonathan, quiero conversar sobre mejorar monitoreo o visibilidad en mi empresa.",
+      solution: "Propuesta: priorizar las señales que necesitas ver y diseñar un primer tablero, alerta o métrica.",
     },
     unsure: {
       title: "No estoy seguro",
       description: "No necesitas saber la solución técnica. Podemos empezar entendiendo qué ocurre, qué necesitas lograr y qué alternativas tienen sentido para tu caso.",
-      whatsappMessage: "Hola Jonathan, tengo un problema tecnológico en mi empresa pero todavía no tengo claro qué tipo de solución necesito.",
+      solution: "Propuesta: comenzar con una conversación breve para ordenar el problema y evaluar alternativas.",
     },
   };
 
@@ -171,8 +173,10 @@ if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemD
     const content = problemContent[selectedButton.dataset.problemOption] || {
       title: selectedButton.textContent.trim() || "Cuéntame tu caso",
       description: "Podemos empezar entendiendo qué ocurre y qué alternativa tiene sentido para tu caso.",
-      whatsappMessage: fallbackWhatsappMessage,
+      solution: "Propuesta: revisar el caso y definir un siguiente paso proporcional.",
     };
+
+    selectedProblemKey = selectedButton.dataset.problemOption || "";
 
     problemOptions.forEach((button) => {
       const isSelected = button === selectedButton;
@@ -184,16 +188,8 @@ if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemD
     window.setTimeout(() => {
       problemDetailTitle.textContent = content.title;
       problemDetailCopy.textContent = content.description;
-      problemDetailCta.href = buildWhatsappUrl(content.whatsappMessage);
-      if (contactProblemType && problemOptionToFormValue[selectedButton.dataset.problemOption]) {
-        contactProblemType.value = problemOptionToFormValue[selectedButton.dataset.problemOption];
-      }
-      if (bookingProblemType && problemOptionToFormValue[selectedButton.dataset.problemOption]) {
-        bookingProblemType.value = problemOptionToFormValue[selectedButton.dataset.problemOption];
-      }
-      if (contactSourceContext && problemOptionToFormValue[selectedButton.dataset.problemOption]) {
-        contactSourceContext.value = "problem-selector";
-      }
+      problemDetailSolution.textContent = content.solution;
+      problemDetailSolution.hidden = false;
       problemDetailCta.hidden = false;
       problemDetail.classList.remove("is-changing");
     }, 120);
@@ -203,6 +199,18 @@ if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemD
     button.addEventListener("click", () => {
       setSelectedProblem(button);
     });
+  });
+
+  problemDetailCta.addEventListener("click", () => {
+    const formValue = problemOptionToFormValue[selectedProblemKey];
+
+    if (contactProblemType && !contactProblemType.value && formValue) {
+      contactProblemType.value = formValue;
+
+      if (contactSourceContext?.value === "form") {
+        contactSourceContext.value = "problem-selector";
+      }
+    }
   });
 }
 const processScrolly = document.querySelector("[data-process-scrolly]");

@@ -19,7 +19,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/styles.css?v=s00-s01">
+    <link rel="stylesheet" href="assets/css/styles.css?v=s02">
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -50,7 +50,7 @@
         ]
       }
     </script>
-    <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/main.js?v=s02" defer></script>
   </head>
   <body id="top">
     <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
@@ -156,34 +156,42 @@
               <button class="problem-option" type="button" aria-pressed="false" aria-controls="problem-selector-detail" data-problem-option="automation">
                 <span class="problem-option__number">01</span>
                 <span class="problem-option__title">Automatizar un proceso</span>
+                <span class="problem-option__status">Seleccionado</span>
               </button>
               <button class="problem-option" type="button" aria-pressed="false" aria-controls="problem-selector-detail" data-problem-option="app">
                 <span class="problem-option__number">02</span>
                 <span class="problem-option__title">Crear una aplicación</span>
+                <span class="problem-option__status">Seleccionado</span>
               </button>
               <button class="problem-option" type="button" aria-pressed="false" aria-controls="problem-selector-detail" data-problem-option="integration">
                 <span class="problem-option__number">03</span>
                 <span class="problem-option__title">Conectar sistemas</span>
+                <span class="problem-option__status">Seleccionado</span>
               </button>
               <button class="problem-option" type="button" aria-pressed="false" aria-controls="problem-selector-detail" data-problem-option="data">
                 <span class="problem-option__number">04</span>
-                <span class="problem-option__title">Trabajar con mis datos</span>
+                <span class="problem-option__title">Trabajar con datos</span>
+                <span class="problem-option__status">Seleccionado</span>
               </button>
               <button class="problem-option" type="button" aria-pressed="false" aria-controls="problem-selector-detail" data-problem-option="infrastructure">
                 <span class="problem-option__number">05</span>
                 <span class="problem-option__title">Mejorar infraestructura</span>
+                <span class="problem-option__status">Seleccionado</span>
               </button>
               <button class="problem-option" type="button" aria-pressed="false" aria-controls="problem-selector-detail" data-problem-option="quality">
                 <span class="problem-option__number">06</span>
                 <span class="problem-option__title">Mejorar calidad</span>
+                <span class="problem-option__status">Seleccionado</span>
               </button>
               <button class="problem-option" type="button" aria-pressed="false" aria-controls="problem-selector-detail" data-problem-option="monitoring">
                 <span class="problem-option__number">07</span>
                 <span class="problem-option__title">Mejorar monitoreo / visibilidad</span>
+                <span class="problem-option__status">Seleccionado</span>
               </button>
               <button class="problem-option" type="button" aria-pressed="false" aria-controls="problem-selector-detail" data-problem-option="unsure">
                 <span class="problem-option__number">08</span>
                 <span class="problem-option__title">No estoy seguro</span>
+                <span class="problem-option__status">Seleccionado</span>
               </button>
             </div>
 
@@ -191,7 +199,8 @@
               <p class="problem-detail__eyebrow">Respuesta contextual</p>
               <h3 id="problem-detail-title" data-problem-detail-title>Selecciona una opción</h3>
               <p data-problem-detail-copy>Selecciona una opción para explorar cómo podemos ayudarte.</p>
-              <a class="button button--primary problem-detail__cta" href="https://wa.me/56931367372?text=Hola%20Jonathan%2C%20vi%20tu%20sitio%20y%20quiero%20conversar%20sobre%20un%20problema%20tecnol%C3%B3gico%20en%20mi%20empresa." target="_blank" rel="noopener noreferrer" data-problem-detail-cta hidden>Cuéntame tu caso</a>
+              <p class="problem-detail__solution" data-problem-detail-solution hidden></p>
+              <a class="button button--primary problem-detail__cta" href="#contacto" data-problem-detail-cta hidden>Conversemos sobre esta solución</a>
             </aside>
           </div>
         </div>
