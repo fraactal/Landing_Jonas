@@ -607,8 +607,14 @@
 }
 
 .poc__content {
-  --flow-space: var(--space-4);
+  --flow-space: var(--space-3);
   max-width: 34rem;
+}
+
+.poc__content h2 {
+  color: #FFFFFF;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: var(--line-height-heading);
 }
 
 .poc__eyebrow {
