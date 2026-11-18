@@ -471,8 +471,8 @@
 .service-card {
   display: grid;
   align-content: start;
-  gap: var(--space-4);
-  min-height: 13rem;
+  gap: var(--space-3);
+  min-height: 14rem;
   background: color-mix(in srgb, var(--color-surface) 82%, transparent);
   transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
 }
@@ -483,6 +483,13 @@
   transform: translateY(-2px);
 }
 
+.service-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
 .service-card__number {
   margin: 0;
   color: var(--color-accent-soft);
@@ -490,6 +497,27 @@
   font-size: var(--font-size-0);
   font-weight: 700;
   letter-spacing: 0.08em;
+}
+
+.service-card__icon {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 25%, var(--color-border));
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-accent) 7%, var(--color-surface));
+  color: var(--color-accent);
+}
+
+.service-card__icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
 }
 
 .service-card h3 {
@@ -1604,6 +1632,10 @@
   }
 
   .problem-selector__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .services__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
