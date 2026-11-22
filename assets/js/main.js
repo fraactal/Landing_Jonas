@@ -789,7 +789,17 @@ if (contactForm) {
     }
 
     if (!leadEndpoint) {
-      setContactStatus("El formulario quedará disponible cuando se configure el endpoint de contacto.", { includeWhatsapp: true });
+      const name = fields.name.value.trim();
+      const company = fields.company?.value.trim() || "";
+      const phone = fields.phone?.value.trim() || "";
+      const whatsappMessage = [
+        `Hola Jonathan, soy ${name}${company ? ` de ${company}` : ""}.`,
+        `Necesito: ${fields.problemType.value}.`,
+        fields.message.value.trim().slice(0, 900),
+        `Contacto: ${fields.email.value.trim()}${phone ? ` / ${phone}` : ""}`,
+      ].join("\n");
+      window.open(buildWhatsappUrl(whatsappMessage), "_blank", "noopener,noreferrer");
+      setContactStatus("Abrimos WhatsApp con tu mensaje para que puedas enviarlo. Si no se abrió, abre", { includeWhatsapp: true });
       return;
     }
 
@@ -857,6 +867,9 @@ const bookingOpenLinks = document.querySelectorAll("[data-booking-open]");
 
 if (bookingPanel && bookingForm) {
   const bookingEndpoint = getRuntimeEndpoint("JV_BOOKING_ENDPOINT", "booking-endpoint");
+  if (bookingEndpoint) {
+    bookingPanel.hidden = false;
+  }
   const bookingFields = {
     name: bookingForm.querySelector('[data-booking-field="name"]'),
     company: bookingForm.querySelector('[data-booking-field="company"]'),
