@@ -114,6 +114,8 @@ const getRuntimeEndpoint = (globalName, metaName) => window[globalName] || docum
 const contactForm = document.querySelector("[data-contact-form]");
 const contactProblemType = document.querySelector("[data-contact-field=\"problemType\"]");
 const contactSourceContext = document.querySelector("[data-contact-source-context]");
+const mobileQuery = window.matchMedia("(max-width: 47.99rem)");
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemDetailSolution && problemDetailCta && problemDetail && problemDetailInitial && problemDetailSelected && problemDetailIcon) {
   let selectedProblemKey = "";
@@ -190,6 +192,11 @@ if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemD
       solution: "Propuesta: revisar el caso y definir un siguiente paso proporcional.",
     };
 
+    if (mobileQuery.matches && selectedButton.classList.contains("is-selected")) {
+      collapseProblemMobile();
+      return;
+    }
+
     selectedProblemKey = selectedButton.dataset.problemOption || "";
 
     problemOptions.forEach((button) => {
@@ -197,6 +204,13 @@ if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemD
       button.classList.toggle("is-selected", isSelected);
       button.setAttribute("aria-pressed", String(isSelected));
     });
+
+    if (mobileQuery.matches) {
+      selectedButton.after(problemDetail);
+      problemDetail.classList.remove("is-mobile-collapsed");
+      problemOptions.forEach((button) => button.setAttribute("aria-expanded", String(button === selectedButton)));
+      selectedButton.scrollIntoView({ block: "start", behavior: prefersReducedMotion.matches ? "auto" : "smooth" });
+    }
 
     problemDetail.classList.add("is-changing");
     window.setTimeout(() => {
@@ -215,6 +229,40 @@ if (problemOptions.length && problemDetailTitle && problemDetailCopy && problemD
       setSelectedProblem(button);
     });
   });
+
+  const problemGrid = document.querySelector(".problem-selector__grid");
+
+  const collapseProblemMobile = () => {
+    problemOptions.forEach((button) => {
+      button.classList.remove("is-selected");
+      button.setAttribute("aria-pressed", "false");
+      button.setAttribute("aria-expanded", "false");
+    });
+    selectedProblemKey = "";
+    problemDetail.classList.add("is-mobile-collapsed");
+  };
+
+  const syncProblemLayout = () => {
+    const selectedButton = Array.from(problemOptions).find((button) => button.classList.contains("is-selected"));
+
+    if (mobileQuery.matches) {
+      problemOptions.forEach((button) => button.setAttribute("aria-expanded", String(button === selectedButton)));
+      if (selectedButton) {
+        selectedButton.after(problemDetail);
+        problemDetail.classList.remove("is-mobile-collapsed");
+      } else {
+        problemDetail.classList.add("is-mobile-collapsed");
+      }
+      return;
+    }
+
+    problemOptions.forEach((button) => button.removeAttribute("aria-expanded"));
+    if (problemGrid) problemGrid.after(problemDetail);
+    problemDetail.classList.remove("is-mobile-collapsed");
+  };
+
+  syncProblemLayout();
+  mobileQuery.addEventListener("change", syncProblemLayout);
 
   problemDetailCta.addEventListener("click", () => {
     const formValue = problemOptionToFormValue[selectedProblemKey];
@@ -247,7 +295,75 @@ if (serviceOptions.length && servicePanel && servicePanelIcon && servicePanelTit
     monitoring: '<svg viewBox="0 0 24 24" focusable="false"><path d="M3 12h4l2.2-5 4 10 2.2-5H21"></path></svg>',
   };
 
+  const serviceList = document.querySelector(".service-explorer__list");
+  let serviceMobileOpen = null;
+
+  const applyServiceMode = () => {
+    const isMobile = mobileQuery.matches;
+
+    if (isMobile) {
+      serviceList.removeAttribute("role");
+      serviceList.removeAttribute("aria-orientation");
+      servicePanel.setAttribute("role", "region");
+      servicePanel.removeAttribute("tabindex");
+      serviceOptions.forEach((option) => {
+        option.removeAttribute("role");
+        option.removeAttribute("aria-selected");
+        option.removeAttribute("tabindex");
+        option.setAttribute("aria-controls", "service-panel");
+        option.setAttribute("aria-expanded", String(option === serviceMobileOpen));
+        option.classList.toggle("is-active", option === serviceMobileOpen);
+      });
+      if (serviceMobileOpen) {
+        serviceMobileOpen.after(servicePanel);
+        servicePanel.classList.remove("is-mobile-collapsed");
+      } else {
+        servicePanel.classList.add("is-mobile-collapsed");
+      }
+      return;
+    }
+
+    serviceList.setAttribute("role", "tablist");
+    serviceList.setAttribute("aria-orientation", "vertical");
+    servicePanel.setAttribute("role", "tabpanel");
+    servicePanel.setAttribute("tabindex", "0");
+    servicePanel.classList.remove("is-mobile-collapsed");
+    serviceList.after(servicePanel);
+    const current = serviceMobileOpen || serviceOptions[0];
+    serviceOptions.forEach((option) => {
+      option.setAttribute("role", "tab");
+      option.removeAttribute("aria-expanded");
+      const isSelected = option === current;
+      option.classList.toggle("is-active", isSelected);
+      option.setAttribute("aria-selected", String(isSelected));
+      option.tabIndex = isSelected ? 0 : -1;
+    });
+    servicePanel.setAttribute("aria-labelledby", current.id);
+  };
+
+  const fillServicePanel = (selectedOption) => {
+    servicePanelTitle.textContent = selectedOption.querySelector(".service-explorer__title")?.textContent.trim() || "Solución";
+    servicePanelDescription.textContent = selectedOption.dataset.serviceDescription || "";
+    servicePanelBenefit.textContent = selectedOption.dataset.serviceBenefit || "";
+    servicePanelIcon.innerHTML = serviceIcons[selectedOption.dataset.serviceOption] || "";
+  };
+
+  const toggleServiceMobile = (option) => {
+    if (serviceMobileOpen === option) {
+      serviceMobileOpen = null;
+    } else {
+      serviceMobileOpen = option;
+      fillServicePanel(option);
+      servicePanel.setAttribute("aria-labelledby", option.id);
+    }
+    applyServiceMode();
+    if (serviceMobileOpen) {
+      option.scrollIntoView({ block: "start", behavior: prefersReducedMotion.matches ? "auto" : "smooth" });
+    }
+  };
+
   const setSelectedService = (selectedOption, shouldFocus = false) => {
+    serviceMobileOpen = selectedOption;
     serviceOptions.forEach((option) => {
       const isSelected = option === selectedOption;
       option.classList.toggle("is-active", isSelected);
@@ -266,11 +382,20 @@ if (serviceOptions.length && servicePanel && servicePanelIcon && servicePanelTit
     }
   };
 
+  applyServiceMode();
+  mobileQuery.addEventListener("change", applyServiceMode);
+
   serviceOptions.forEach((option, index) => {
-    option.addEventListener("click", () => setSelectedService(option));
+    option.addEventListener("click", () => {
+      if (mobileQuery.matches) {
+        toggleServiceMobile(option);
+        return;
+      }
+      setSelectedService(option);
+    });
     option.addEventListener("keydown", (event) => {
       const navigationKeys = ["ArrowDown", "ArrowRight", "ArrowUp", "ArrowLeft", "Home", "End"];
-      if (!navigationKeys.includes(event.key)) return;
+      if (mobileQuery.matches || !navigationKeys.includes(event.key)) return;
 
       event.preventDefault();
       const nextIndex = event.key === "Home" ? 0 : event.key === "End" ? serviceOptions.length - 1 : (index + (event.key === "ArrowDown" || event.key === "ArrowRight" ? 1 : -1) + serviceOptions.length) % serviceOptions.length;

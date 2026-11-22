@@ -1903,3 +1903,19 @@
   margin-inline-end: var(--space-3);
   color: var(--color-border);
 }
+
+/* Spec 047/048: selector y servicios como acordeón en móvil */
+@media (max-width: 47.99rem) {
+  .problem-detail.is-mobile-collapsed,
+  .service-explorer__panel.is-mobile-collapsed { display: none; }
+  .problem-option,
+  .service-explorer__option { scroll-margin-top: 6rem; }
+  .problem-option { grid-template-columns: auto minmax(0, 1fr) auto; min-height: 4.25rem; }
+  .service-explorer__option { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .problem-option::after,
+  .service-explorer__option::after { content: "+"; color: var(--color-accent); font-size: 1.5rem; font-weight: 600; line-height: 1; }
+  .problem-option.is-selected::after,
+  .service-explorer__option.is-active::after { content: "\2212"; }
+  .service-explorer__panel { min-height: 0; margin-block: var(--space-1) var(--space-2); }
+  .problem-detail { margin-block: var(--space-1) var(--space-2); }
+}
