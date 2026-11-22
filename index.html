@@ -29,7 +29,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/styles.css?v=057">
+    <link rel="stylesheet" href="assets/css/styles.css?v=058">
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -60,7 +60,7 @@
         ]
       }
     </script>
-    <script src="assets/js/main.js?v=s08" defer></script>
+    <script src="assets/js/main.js?v=s09" defer></script>
   </head>
   <body id="top">
     <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
@@ -342,16 +342,21 @@
       </section>
       <section class="process section" id="como-trabajamos" aria-labelledby="process-title" data-process-scrolly>
         <div class="container process__inner">
+          
+
+          <div class="process__layout">
+          <div class="process__side">
           <div class="process__heading flow">
             <p class="process__eyebrow">Proceso</p>
             <h2 id="process-title">Cómo trabajamos</h2>
             <p>Un proceso claro para entender el problema, validar una solución y construir solo lo que realmente tiene sentido.</p>
           </div>
+          <aside class="process__summary" aria-hidden="true"> <p class="process__summary-label">Tu camino</p> <div class="process__progress" aria-hidden="true"><span class="process__progress-item is-active" data-process-indicator="1">Entendemos</span> <span class="process__progress-item" data-process-indicator="2">Analizamos</span> <span class="process__progress-item" data-process-indicator="3">Proponemos</span> <span class="process__progress-item" data-process-indicator="4">Validamos</span> <span class="process__progress-item" data-process-indicator="5">Definimos</span> <span class="process__progress-item" data-process-indicator="6">Construimos</span> <span class="process__progress-item" data-process-indicator="7">Acompañamos</span> </div> </aside>
+          </div>
+          <div class="process__stepper" data-process-stepper><div class="process__stepper-bar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><p class="process__stepper-count" data-process-count aria-hidden="true">Paso 1 de 7</p></div>
+            
 
-          <div class="process__layout">
-            <aside class="process__summary" aria-hidden="true"> <p class="process__summary-label">Cómo trabajamos</p> <div class="process__progress" aria-hidden="true"><span class="process__progress-item is-active" data-process-indicator="1">Entendemos</span> <span class="process__progress-item" data-process-indicator="2">Analizamos</span> <span class="process__progress-item" data-process-indicator="3">Proponemos</span> <span class="process__progress-item" data-process-indicator="4">Validamos</span> <span class="process__progress-item" data-process-indicator="5">Definimos</span> <span class="process__progress-item" data-process-indicator="6">Construimos</span> <span class="process__progress-item" data-process-indicator="7">Acompañamos</span> </div> </aside>
-
-            <ol class="process__steps">
+            <ol class="process__steps" aria-live="polite">
               <li class="process-step is-active" data-process-step="1" aria-current="step">
                 <article class="process-step__card"><span class="process-step__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg></span>
                   <p class="process-step__number">01</p>
@@ -436,6 +441,7 @@
                 </article>
               </li>
             </ol>
+          <div class="process__stepper-nav" data-process-nav><button class="button button--secondary" type="button" data-process-prev>Anterior</button><button class="button button--primary" type="button" data-process-next>Siguiente</button></div>
           </div>
         </div>
       </section>

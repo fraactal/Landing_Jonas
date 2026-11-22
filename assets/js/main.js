@@ -522,11 +522,56 @@ if (processScrolly && "IntersectionObserver" in window) {
     threshold: [0.2, 0.45, 0.7],
   });
 
+  const stepperBars = Array.from(processScrolly.querySelectorAll(".process__stepper-bar i"));
+  const stepperCount = processScrolly.querySelector("[data-process-count]");
+  const prevStep = processScrolly.querySelector("[data-process-prev]");
+  const nextStep = processScrolly.querySelector("[data-process-next]");
+  const stepsList = processScrolly.querySelector(".process__steps");
+  let mobileStepIndex = 0;
+
+  const showMobileStep = (index, userAction = false) => {
+    mobileStepIndex = Math.max(0, Math.min(processSteps.length - 1, index));
+    processSteps.forEach((step, i) => step.classList.toggle("is-mobile-hidden", i !== mobileStepIndex));
+    stepperBars.forEach((bar, i) => bar.classList.toggle("is-on", i <= mobileStepIndex));
+    if (stepperCount) stepperCount.textContent = "Paso " + (mobileStepIndex + 1) + " de " + processSteps.length;
+    if (prevStep) prevStep.disabled = mobileStepIndex === 0;
+    if (nextStep) nextStep.disabled = mobileStepIndex === processSteps.length - 1;
+    setActiveProcessStep(processSteps[mobileStepIndex]);
+    if (userAction) {
+      const top = processScrolly.querySelector(".process__stepper").getBoundingClientRect().top;
+      if (top < 72) window.scrollBy({ top: top - 88, behavior: prefersReducedMotion.matches ? "auto" : "smooth" });
+    }
+  };
+
+  const applyProcessMode = () => {
+    if (mobileQuery.matches) {
+      processScrolly.classList.add("process--stepper");
+      showMobileStep(mobileStepIndex);
+    } else {
+      processScrolly.classList.remove("process--stepper");
+      processSteps.forEach((step) => step.classList.remove("is-mobile-hidden"));
+    }
+  };
+
+  if (prevStep && nextStep && stepsList) {
+    prevStep.addEventListener("click", () => showMobileStep(mobileStepIndex - 1, true));
+    nextStep.addEventListener("click", () => showMobileStep(mobileStepIndex + 1, true));
+    let touchStartX = 0;
+    stepsList.addEventListener("touchstart", (event) => { touchStartX = event.changedTouches[0].clientX; }, { passive: true });
+    stepsList.addEventListener("touchend", (event) => {
+      if (!processScrolly.classList.contains("process--stepper")) return;
+      const delta = event.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(delta) > 50) showMobileStep(mobileStepIndex + (delta < 0 ? 1 : -1), true);
+    }, { passive: true });
+    mobileQuery.addEventListener("change", applyProcessMode);
+  }
+
   processScrolly.classList.add("process--reveal");
   processSteps.forEach((step) => {
     processObserver.observe(step);
   });
   if (processSteps[0]) setActiveProcessStep(processSteps[0]);
+  applyProcessMode();
 }
 const faqTriggers = document.querySelectorAll("[data-faq-trigger]");
 
