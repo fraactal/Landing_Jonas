@@ -482,8 +482,11 @@ if (processScrolly && "IntersectionObserver" in window) {
     });
 
     processIndicators.forEach((indicator) => {
-      indicator.classList.toggle("is-active", indicator.dataset.processIndicator === stepNumber);
+      const position = Number(indicator.dataset.processIndicator);
+      indicator.classList.toggle("is-active", position === Number(stepNumber));
+      indicator.classList.toggle("is-done", position < Number(stepNumber));
     });
+    processScrolly.style.setProperty("--process-progress", String((Number(stepNumber) - 1) / Math.max(1, processSteps.length - 1)));
 
     if (activeNumber && stepNumber) {
       activeNumber.textContent = stepNumber.padStart(2, "0");

@@ -2007,3 +2007,28 @@
 .service-explorer__panel-icon { width: 3rem; height: 3rem; }
 .service-explorer__panel-icon svg { width: 1.5rem; height: 1.5rem; }
 .service-explorer__panel h3 { font-size: clamp(1.5rem, 3.4vw, 2.3rem); }
+
+/* Spec 056: cómo trabajamos como línea de tiempo viva */
+.process-step__card { position: relative; overflow: hidden; }
+.process-step__card > * { position: relative; }
+.process-step__icon { display: grid; width: 3rem; height: 3rem; place-items: center; border-radius: var(--radius-sm); background: color-mix(in srgb, var(--color-accent) 10%, var(--color-surface)); color: var(--color-accent); }
+.process-step__icon svg { width: 1.5rem; height: 1.5rem; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
+.process-step__number { position: absolute !important; inset-block-start: var(--space-3); inset-inline-end: var(--space-5); color: var(--color-accent) !important; font-size: clamp(4rem, 9vw, 7rem) !important; line-height: 1; opacity: 0.09; letter-spacing: -0.04em !important; pointer-events: none; }
+.process-step__outcome { margin: 0; padding: var(--space-3) var(--space-4); border-inline-start: 3px solid var(--color-accent-turquoise); background: color-mix(in srgb, var(--color-accent-turquoise) 9%, transparent); color: var(--color-text) !important; font-size: var(--font-size-0) !important; font-weight: 600; }
+.process-step__outcome strong { display: block; margin-block-end: 2px; color: var(--color-accent-turquoise-text); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; }
+@media (min-width: 64rem) and (min-height: 42rem) {
+  .process__layout { grid-template-columns: minmax(15rem, 0.62fr) minmax(0, 1.38fr); }
+  .process-step { min-height: min(22rem, 46vh); }
+  .process-step h3 { font-size: var(--font-size-4); }
+  .process-step__card { padding: var(--space-8); }
+  .process__summary { gap: var(--space-4); }
+  .process__progress { position: relative; gap: var(--space-4); }
+  .process__progress::before { content: ""; position: absolute; inset-block: 0.4rem; inset-inline-start: 0.4rem; width: 2px; background: var(--color-border); }
+  .process__progress::after { content: ""; position: absolute; inset-block-start: 0.4rem; inset-inline-start: 0.4rem; width: 2px; height: calc((100% - 0.8rem) * var(--process-progress, 0)); background: var(--color-accent-turquoise); transition: height var(--transition-fast); }
+  .process__progress-item { position: relative; z-index: 1; grid-template-columns: 0.85rem auto; font-size: var(--font-size-1); letter-spacing: 0; text-transform: none; }
+  .process__progress-item::before { background: var(--color-surface); }
+  .process__progress-item.is-done { color: var(--color-text); }
+  .process__progress-item.is-done::before { border-color: var(--color-accent-turquoise); background: var(--color-accent-turquoise); }
+  .process__progress-item.is-active { font-weight: 800; }
+}
+@media (prefers-reduced-motion: reduce) { .process__progress::after { transition: none; } }
