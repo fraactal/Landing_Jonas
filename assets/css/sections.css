@@ -1957,8 +1957,9 @@
 @media (max-width: 47.99rem) {
   .app-showcase__item, .app-showcase__item:nth-child(even) { flex-direction: row; gap: var(--space-3); }
   .app-showcase__item:nth-child(even) { flex-direction: row-reverse; }
-  .app-showcase__images { grid-template-columns: repeat(2, 3.6rem); gap: 0.25rem; }
-  .app-showcase__images figure { height: 7.5rem; border-width: 2px; }
+  .app-showcase__images { grid-template-columns: repeat(2, 4.25rem); gap: 0.25rem; }
+  .app-showcase__images figure { height: 9rem; border-width: 2px; }
+  .app-showcase__content .cases__eyebrow { display: none; }
 }
 .project-list .case-card { padding: var(--space-4); }
 .project-list .case-card h4 { font-size: var(--font-size-2); }
