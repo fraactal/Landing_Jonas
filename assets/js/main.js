@@ -403,6 +403,25 @@ if (serviceOptions.length && servicePanel && servicePanelIcon && servicePanelTit
     });
   });
 }
+const heroFlow = document.querySelector(".hero-flow");
+
+if (heroFlow && !prefersReducedMotion.matches) {
+  heroFlow.classList.add("hero-flow--anim");
+  const playHeroFlow = () => heroFlow.classList.add("is-playing");
+
+  if ("IntersectionObserver" in window) {
+    const flowObserver = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        playHeroFlow();
+        flowObserver.disconnect();
+      }
+    }, { threshold: 0.4 });
+    flowObserver.observe(heroFlow);
+  } else {
+    playHeroFlow();
+  }
+}
+
 const catalogCarousel = document.querySelector("[data-carousel]");
 
 if (catalogCarousel) {
