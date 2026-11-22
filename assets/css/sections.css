@@ -192,7 +192,7 @@
 }
 
 .hero h1 {
-  max-width: 12ch;
+  max-width: 16ch;
   font-size: clamp(2.4rem, 5vw, 4.65rem);
   letter-spacing: -0.04em;
   text-wrap: balance;
@@ -202,6 +202,10 @@
   --cluster-gap: var(--space-3);
   margin-block-start: var(--space-2);
 }
+
+.hero__trust { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin: var(--space-2) 0 0; padding: 0; list-style: none; color: var(--color-muted); font-size: 0.9375rem; }
+.hero__trust li { display: inline-flex; align-items: center; gap: var(--space-2); }
+.hero__trust li::before { content: ""; width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--color-accent-turquoise); }
 
 .hero-flow { margin: 0; }
 .hero-flow__card { display: grid; gap: var(--space-3); border: 1px solid color-mix(in srgb, var(--color-border) 84%, transparent); border-radius: var(--radius-lg); background: var(--color-surface); box-shadow: var(--shadow-card); padding: clamp(1rem, 2vw, 1.35rem); }
