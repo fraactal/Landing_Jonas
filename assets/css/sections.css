@@ -2083,3 +2083,14 @@
   .process__stepper-nav .button:disabled { opacity: 0.4; cursor: default; }
 }
 @media (prefers-reduced-motion: reduce) { .process__stepper-bar i { transition: none; } }
+
+/* Spec 059: tarjetas del mismo alto */
+@media (max-width: 47.99rem) {
+  .process--stepper .process__steps { display: grid; }
+  .process--stepper .process-step { grid-area: 1 / 1; }
+  .process--stepper .process-step.is-mobile-hidden { display: block; visibility: hidden; opacity: 0; pointer-events: none; }
+  .process--stepper .process-step__card { height: 100%; align-content: start; }
+}
+@media (min-width: 64rem) and (min-height: 42rem) {
+  .process-step__card { min-height: 21rem; align-content: center; }
+}

@@ -531,7 +531,10 @@ if (processScrolly && "IntersectionObserver" in window) {
 
   const showMobileStep = (index, userAction = false) => {
     mobileStepIndex = Math.max(0, Math.min(processSteps.length - 1, index));
-    processSteps.forEach((step, i) => step.classList.toggle("is-mobile-hidden", i !== mobileStepIndex));
+    processSteps.forEach((step, i) => {
+      step.classList.toggle("is-mobile-hidden", i !== mobileStepIndex);
+      if (i !== mobileStepIndex) step.setAttribute("aria-hidden", "true"); else step.removeAttribute("aria-hidden");
+    });
     stepperBars.forEach((bar, i) => bar.classList.toggle("is-on", i <= mobileStepIndex));
     if (stepperCount) stepperCount.textContent = "Paso " + (mobileStepIndex + 1) + " de " + processSteps.length;
     if (prevStep) prevStep.disabled = mobileStepIndex === 0;
@@ -549,7 +552,7 @@ if (processScrolly && "IntersectionObserver" in window) {
       showMobileStep(mobileStepIndex);
     } else {
       processScrolly.classList.remove("process--stepper");
-      processSteps.forEach((step) => step.classList.remove("is-mobile-hidden"));
+      processSteps.forEach((step) => { step.classList.remove("is-mobile-hidden"); step.removeAttribute("aria-hidden"); });
     }
   };
 
