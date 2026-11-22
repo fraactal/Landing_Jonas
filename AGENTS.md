@@ -134,19 +134,23 @@ Componentes:
 
 ## 8. Orden de la landing
 
-No alterar sin spec:
+No alterar sin spec. Orden vigente desde la spec 050 (decisión de Jonathan, 22 nov 2026):
 1. Navbar
 2. Hero
-3. ¿Tu problema es...?
-4. Selector de problemas
-5. Servicios
-6. Cómo trabajamos
-7. Demo / PoC
-8. Casos / ejemplos
+3. Para emprendedores y pymes (antes "Demo / PoC")
+4. Catálogos, aplicaciones y proyectos (antes "Casos / ejemplos")
+5. ¿Tu problema es...?
+6. Selector de problemas
+7. Servicios
+8. Cómo trabajamos
 9. Sobre mí
 10. FAQ
 11. CTA final
 12. Footer
+
+Orden anterior (referencia): Hero, ¿Tu problema es...?, Selector, Servicios, Cómo trabajamos, Demo / PoC, Casos / ejemplos, Sobre mí, FAQ, CTA final, Footer.
+
+En móvil (menos de 48rem), el selector de problemas y los servicios funcionan como acordeón (specs 047 y 048); no cuentan como una interacción visual adicional.
 
 ## 9. Interacciones aprobadas
 
