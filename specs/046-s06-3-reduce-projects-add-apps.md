@@ -10,6 +10,7 @@ Mostrar solo lo que está terminado y se puede abrir, para reforzar confianza.
 
 - Retirar "Otros proyectos tecnológicos" (Vesta 2.0, AutoFlip) y "Productos en desarrollo" (PasoUno, Fideliza NFC).
 - Agregar PasoUno y Checklist Auto a "Aplicaciones disponibles" con enlace a sus implementaciones publicadas.
+- Enlazar Emperatriz a https://emperatriz.pages.dev/ (URL confirmada por Jonathan).
 - Mantener catálogos, Cera & Aroma, Finanzas Claras y Vesta ESG destacado.
 
 ## Criterios de aceptación
@@ -20,4 +21,4 @@ Mostrar solo lo que está terminado y se puede abrir, para reforzar confianza.
 
 ## Fuera de alcance
 
-- Vesta 2.0 (vuelve cuando exista demo con URL), Emperatriz sin enlace (pendiente de URL), orden de secciones, precios.
+- Vesta 2.0 (vuelve cuando exista demo con URL), Vesta 2.0 y Vesta ESG sin enlace público: la demo está apagada, orden de secciones, precios.
