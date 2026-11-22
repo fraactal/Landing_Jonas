@@ -403,6 +403,43 @@ if (serviceOptions.length && servicePanel && servicePanelIcon && servicePanelTit
     });
   });
 }
+const catalogCarousel = document.querySelector("[data-carousel]");
+
+if (catalogCarousel) {
+  const track = catalogCarousel.querySelector("[data-carousel-track]");
+  const dots = catalogCarousel.querySelector("[data-carousel-dots]");
+  const prevButton = catalogCarousel.querySelector("[data-carousel-prev]");
+  const nextButton = catalogCarousel.querySelector("[data-carousel-next]");
+  const cards = Array.from(track.children);
+
+  cards.forEach(() => dots.appendChild(document.createElement("i")));
+
+  const cardStep = () => {
+    const first = cards[0];
+    const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+    return first ? first.getBoundingClientRect().width + gap : track.clientWidth;
+  };
+
+  const updateCarousel = () => {
+    const maxScroll = track.scrollWidth - track.clientWidth - 2;
+    const progress = maxScroll > 0 ? Math.min(1, Math.max(0, track.scrollLeft / maxScroll)) : 0;
+    const index = Math.round(progress * (cards.length - 1));
+    Array.from(dots.children).forEach((dot, i) => dot.classList.toggle("is-active", i === index));
+    prevButton.disabled = track.scrollLeft <= 2;
+    nextButton.disabled = track.scrollLeft >= maxScroll;
+  };
+
+  const scrollByCards = (direction) => {
+    track.scrollBy({ left: direction * cardStep() * 2, behavior: prefersReducedMotion.matches ? "auto" : "smooth" });
+  };
+
+  prevButton.addEventListener("click", () => scrollByCards(-1));
+  nextButton.addEventListener("click", () => scrollByCards(1));
+  track.addEventListener("scroll", () => window.requestAnimationFrame(updateCarousel), { passive: true });
+  window.addEventListener("resize", updateCarousel);
+  updateCarousel();
+}
+
 const processScrolly = document.querySelector("[data-process-scrolly]");
 
 if (processScrolly && "IntersectionObserver" in window) {

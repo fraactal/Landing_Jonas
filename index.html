@@ -29,7 +29,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/styles.css?v=047">
+    <link rel="stylesheet" href="assets/css/styles.css?v=051">
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -60,7 +60,7 @@
         ]
       }
     </script>
-    <script src="assets/js/main.js?v=s03" defer></script>
+    <script src="assets/js/main.js?v=s05" defer></script>
   </head>
   <body id="top">
     <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
@@ -186,12 +186,21 @@
                 <h3 id="catalogs-title">Catálogos digitales para vender con claridad</h3>
                 <p>Catálogos digitales que permiten mostrar productos y recibir solicitudes mediante WhatsApp, sin necesitar una tienda online compleja.</p>
               </div>
-              <div class="catalog-showcase" aria-label="Implementaciones de catálogos comerciales">
-                <article class="catalog-showcase__item"><figure class="product-shot"><img src="assets/images/products/catalogo-flor-y-lumbre.png" alt="Catálogo Flor y Lumbre con asistente de consultas y botón de WhatsApp" loading="lazy"></figure><div><h4>Flor y Lumbre</h4><p>Catálogo digital con consultas guiadas para acompañar pedidos personalizados.</p><a href="https://florylumbre.pages.dev/" target="_blank" rel="noopener noreferrer">Ver implementación <span aria-hidden="true">↗</span></a></div></article>
-                <article class="catalog-showcase__item"><figure class="product-shot"><img src="assets/images/products/catalogo-armatukit.png" alt="Catálogo ARMATUKIT para productos tecnológicos y pedidos por WhatsApp" loading="lazy"></figure><div><h4>ARMATUKIT</h4><p>Catálogo para ordenar una oferta comercial y recibir pedidos por WhatsApp.</p><a href="https://armatukit.pages.dev/" target="_blank" rel="noopener noreferrer">Ver implementación <span aria-hidden="true">↗</span></a></div></article>
-                <article class="catalog-showcase__item"><figure class="product-shot"><img src="assets/images/products/catalogo-emperatriz.png" alt="Catálogo Emperatriz con productos artesanales y pedido" loading="lazy"></figure><div><h4>Emperatriz</h4><p>Catálogo para explorar productos, preparar un pedido y canalizar la consulta.</p><a href="https://emperatriz.pages.dev/" target="_blank" rel="noopener noreferrer">Ver implementación <span aria-hidden="true">↗</span></a></div></article>
-                <article class="catalog-showcase__item"><figure class="product-shot"><img src="assets/images/products/catalogo-madre-masa.png" alt="Catálogo Madre Masa con buscador de productos" loading="lazy"></figure><div><h4>Madre Masa</h4><p>Una vitrina comercial clara para acercar productos a conversaciones de compra.</p><a href="https://madre-masa.pages.dev/" target="_blank" rel="noopener noreferrer">Ver implementación <span aria-hidden="true">↗</span></a></div></article>
-                <article class="catalog-showcase__item catalog-showcase__item--text"><div><p class="catalog-showcase__label">Implementación de catálogo</p><h4>Conectiva</h4><p>Ejemplo de catálogo comercial preparado para compartir productos y recibir consultas.</p><a href="#contacto">Quiero un catálogo similar <span aria-hidden="true">→</span></a></div></article>
+              <div class="catalog-carousel" data-carousel>
+                <div class="catalog-carousel__track" role="region" aria-label="Implementaciones de catálogos comerciales" tabindex="0" data-carousel-track>
+                  <article class="catalog-card"><figure class="catalog-card__shot"><img src="assets/images/products/catalogo-flor-y-lumbre.webp" alt="Catálogo Flor y Lumbre con asistente de consultas y botón de WhatsApp" width="366" height="801" loading="lazy"></figure><div class="catalog-card__body"><h4>Flor y Lumbre</h4><p>Consultas guiadas para pedidos personalizados.</p><a href="https://florylumbre.pages.dev/" target="_blank" rel="noopener noreferrer">Ver implementación <span aria-hidden="true">↗</span></a></div></article>
+                  <article class="catalog-card"><figure class="catalog-card__shot"><img src="assets/images/products/catalogo-armatukit.webp" alt="Catálogo ARMATUKIT para productos tecnológicos y pedidos por WhatsApp" width="364" height="806" loading="lazy"></figure><div class="catalog-card__body"><h4>ARMATUKIT</h4><p>Oferta ordenada y pedidos por WhatsApp.</p><a href="https://armatukit.pages.dev/" target="_blank" rel="noopener noreferrer">Ver implementación <span aria-hidden="true">↗</span></a></div></article>
+                  <article class="catalog-card"><figure class="catalog-card__shot"><img src="assets/images/products/catalogo-emperatriz.webp" alt="Catálogo Emperatriz con productos artesanales y pedido" width="341" height="2149" loading="lazy"></figure><div class="catalog-card__body"><h4>Emperatriz</h4><p>Explora productos y prepara tu pedido.</p><a href="https://emperatriz.pages.dev/" target="_blank" rel="noopener noreferrer">Ver implementación <span aria-hidden="true">↗</span></a></div></article>
+                  <article class="catalog-card"><figure class="catalog-card__shot"><img src="assets/images/products/catalogo-madre-masa.webp" alt="Catálogo Madre Masa con buscador de productos" width="367" height="802" loading="lazy"></figure><div class="catalog-card__body"><h4>Madre Masa</h4><p>Vitrina clara con buscador de productos.</p><a href="https://madre-masa.pages.dev/" target="_blank" rel="noopener noreferrer">Ver implementación <span aria-hidden="true">↗</span></a></div></article>
+                  <article class="catalog-card catalog-card--example"><div class="catalog-card__body"><p class="catalog-card__label">Ejemplo</p><h4>Conectiva</h4><p>Catálogo de ejemplo para compartir productos y recibir consultas.</p><a href="#contacto">Quiero uno similar <span aria-hidden="true">→</span></a></div></article>
+                </div>
+                <div class="catalog-carousel__footer">
+                  <div class="catalog-carousel__dots" aria-hidden="true" data-carousel-dots></div>
+                  <div class="catalog-carousel__controls">
+                    <button class="catalog-carousel__button" type="button" aria-label="Catálogos anteriores" data-carousel-prev>&#8249;</button>
+                    <button class="catalog-carousel__button" type="button" aria-label="Catálogos siguientes" data-carousel-next>&#8250;</button>
+                  </div>
+                </div>
               </div>
               <a class="button button--primary cases__group-cta" href="#contacto">Quiero un catálogo para mi negocio</a>
             </section>
