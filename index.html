@@ -29,7 +29,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/styles.css?v=056">
+    <link rel="stylesheet" href="assets/css/styles.css?v=057">
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -60,7 +60,7 @@
         ]
       }
     </script>
-    <script src="assets/js/main.js?v=s07" defer></script>
+    <script src="assets/js/main.js?v=s08" defer></script>
   </head>
   <body id="top">
     <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
@@ -82,9 +82,8 @@
           aria-controls="primary-navigation"
           data-nav-toggle
         >
-          <span class="nav-toggle__line"></span>
-          <span class="nav-toggle__line"></span>
-          <span class="nav-toggle__label">Menú</span>
+          <span class="nav-toggle__icon" aria-hidden="true"><span class="nav-toggle__line"></span><span class="nav-toggle__line"></span><span class="nav-toggle__line"></span></span>
+          <span class="nav-toggle__label" data-nav-label>Menú</span>
         </button>
 
         <nav class="site-nav" id="primary-navigation" aria-label="Navegación principal" data-site-nav>
@@ -96,6 +95,7 @@
         </nav>
       </div>
     </header>
+    <div class="nav-backdrop" data-nav-backdrop aria-hidden="true"></div>
 
     <main id="main-content">
       <section class="hero section" aria-labelledby="hero-title">
@@ -349,7 +349,7 @@
           </div>
 
           <div class="process__layout">
-            <aside class="process__summary" aria-hidden="true"> <p class="process__summary-label">Tu camino</p> <div class="process__progress" aria-hidden="true"><span class="process__progress-item is-active" data-process-indicator="1">Entendemos</span> <span class="process__progress-item" data-process-indicator="2">Analizamos</span> <span class="process__progress-item" data-process-indicator="3">Proponemos</span> <span class="process__progress-item" data-process-indicator="4">Validamos</span> <span class="process__progress-item" data-process-indicator="5">Definimos</span> <span class="process__progress-item" data-process-indicator="6">Construimos</span> <span class="process__progress-item" data-process-indicator="7">Acompañamos</span> </div> </aside>
+            <aside class="process__summary" aria-hidden="true"> <p class="process__summary-label">Cómo trabajamos</p> <div class="process__progress" aria-hidden="true"><span class="process__progress-item is-active" data-process-indicator="1">Entendemos</span> <span class="process__progress-item" data-process-indicator="2">Analizamos</span> <span class="process__progress-item" data-process-indicator="3">Proponemos</span> <span class="process__progress-item" data-process-indicator="4">Validamos</span> <span class="process__progress-item" data-process-indicator="5">Definimos</span> <span class="process__progress-item" data-process-indicator="6">Construimos</span> <span class="process__progress-item" data-process-indicator="7">Acompañamos</span> </div> </aside>
 
             <ol class="process__steps">
               <li class="process-step is-active" data-process-step="1" aria-current="step">

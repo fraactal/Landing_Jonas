@@ -2032,3 +2032,28 @@
   .process__progress-item.is-active { font-weight: 800; }
 }
 @media (prefers-reduced-motion: reduce) { .process__progress::after { transition: none; } }
+
+/* Spec 057: menú móvil */
+.nav-toggle__icon { display: grid; gap: 4px; width: 1.125rem; }
+.nav-toggle__line { transition: transform var(--transition-fast), opacity var(--transition-fast); transform-origin: center; }
+.nav-toggle__line { height: 2px; border-radius: 2px; width: 100%; }
+.nav-backdrop { display: none; }
+@media (max-width: 47.99rem) {
+  .site-header.is-open .nav-toggle__line:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .site-header.is-open .nav-toggle__line:nth-child(2) { opacity: 0; }
+  .site-header.is-open .nav-toggle__line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+  .site-header.is-open ~ .nav-backdrop { position: fixed; inset: 0; z-index: calc(var(--z-sticky) - 1); display: block; background: rgb(24 43 61 / 40%); }
+  .js .site-header.is-open .site-nav { gap: 0; padding: var(--space-2) var(--space-4) var(--space-4); box-shadow: 0 18px 40px rgb(24 43 61 / 22%); animation: nav-panel-in 0.2s ease-out; }
+  .js .site-header.is-open .site-nav a:not(.button) { min-height: 3.25rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--color-border); color: var(--color-text); font-size: var(--font-size-1); }
+  .js .site-header.is-open .site-nav a:not(.button)::after { content: "\203A"; color: var(--color-accent); font-size: 1.5rem; line-height: 1; }
+  .js .site-header.is-open .site-nav .button { width: 100%; margin-block-start: var(--space-4); justify-content: center; }
+}
+@keyframes nav-panel-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .nav-toggle__line { transition: none; } .js .site-header.is-open .site-nav { animation: none; } }
+
+/* Spec 057: pasos sin spoilers (PC) */
+.process__summary-label { color: var(--color-accent); }
+@media (min-width: 64rem) and (min-height: 42rem) {
+  .process--reveal .process-step:not(.is-reached) .process-step__card { opacity: 0; transform: translateY(1.5rem); }
+  .process-step__card { transition-duration: 0.45s; }
+}

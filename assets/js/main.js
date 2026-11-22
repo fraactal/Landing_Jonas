@@ -7,7 +7,15 @@ if (header && toggle && nav) {
   const setOpen = (isOpen) => {
     header.classList.toggle("is-open", isOpen);
     toggle.setAttribute("aria-expanded", String(isOpen));
+    const navLabel = toggle.querySelector("[data-nav-label]");
+    if (navLabel) navLabel.textContent = isOpen ? "Cerrar" : "Menú";
   };
+
+  document.addEventListener("click", (event) => {
+    if (toggle.getAttribute("aria-expanded") === "true" && event.target instanceof Node && !header.contains(event.target)) {
+      setOpen(false);
+    }
+  });
 
   toggle.addEventListener("click", () => {
     setOpen(toggle.getAttribute("aria-expanded") !== "true");
@@ -486,6 +494,9 @@ if (processScrolly && "IntersectionObserver" in window) {
       indicator.classList.toggle("is-active", position === Number(stepNumber));
       indicator.classList.toggle("is-done", position < Number(stepNumber));
     });
+    processSteps.forEach((step) => {
+      step.classList.toggle("is-reached", Number(step.dataset.processStep) <= Number(stepNumber));
+    });
     processScrolly.style.setProperty("--process-progress", String((Number(stepNumber) - 1) / Math.max(1, processSteps.length - 1)));
 
     if (activeNumber && stepNumber) {
@@ -511,9 +522,11 @@ if (processScrolly && "IntersectionObserver" in window) {
     threshold: [0.2, 0.45, 0.7],
   });
 
+  processScrolly.classList.add("process--reveal");
   processSteps.forEach((step) => {
     processObserver.observe(step);
   });
+  if (processSteps[0]) setActiveProcessStep(processSteps[0]);
 }
 const faqTriggers = document.querySelectorAll("[data-faq-trigger]");
 
