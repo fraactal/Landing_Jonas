@@ -2101,3 +2101,9 @@ figure.about__visual::after { content: ""; position: absolute; inset: auto 0 0; 
 .about__photo { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; }
 @media (min-width: 48rem) { figure.about__visual { aspect-ratio: 4 / 5; } }
 .about__capabilities { margin-block-start: var(--space-3); }
+
+/* Spec 061: 3 tarjetas visibles en PC */
+@media (min-width: 48rem) {
+  .catalog-card { flex: 0 0 calc((100% - var(--space-4) * 2) / 3); }
+  .catalog-card__shot { height: 17rem; }
+}
