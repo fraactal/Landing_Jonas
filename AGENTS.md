@@ -296,7 +296,7 @@ Hasta que exista configuración real:
 - no publicar valores ficticios.
 
 Correo objetivo futuro:
-`info@jonathanvaldes.com`
+`contacto@jonathanvaldes.com`
 
 ## 18. Contenido
 

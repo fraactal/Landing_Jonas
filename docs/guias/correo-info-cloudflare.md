@@ -1,3 +1,5 @@
+> **Actualización (Spec 073):** el sitio usa **contacto@jonathanvaldes.com**, que ya estaba configurado y activo en Cloudflare hacia jonathan.valdes.o@gmail.com. Esta guía queda como referencia para crear otras direcciones; donde dice `info`, léase `contacto`.
+
 # Guía: correo info@jonathanvaldes.com con Cloudflare Email Routing
 
 Objetivo: que lo que llegue a **info@jonathanvaldes.com** se reenvíe a **jonathan.valdes.o@gmail.com**.
