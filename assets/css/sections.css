@@ -2109,3 +2109,8 @@ figure.about__visual::after { content: ""; position: absolute; inset: auto 0 0; 
   .site-footer__contact a[href^="mailto:"] { order: 0; }
   .site-footer__wa-icon { width: 1.125rem; height: 1.125rem; }
 }
+
+/* Spec 067: capturas reales de Vesta ESG */
+.featured-project__shot { margin: 0; display: grid; gap: var(--space-2); }
+.featured-project__shot img { display: block; width: 100%; height: auto; border-radius: var(--radius-md); border: 1px solid rgb(255 255 255 / 18%); box-shadow: 0 24px 60px rgb(0 0 0 / 35%); }
+.featured-project__shot figcaption { color: var(--color-dark-muted); font-size: 0.75rem; text-align: center; }
