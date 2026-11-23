@@ -2169,3 +2169,20 @@ figure.about__visual::after { content: ""; position: absolute; inset: auto 0 0; 
 /* Spec 077: verificación de seguridad (Turnstile) */
 .contact-form__turnstile { min-height: 0; }
 .contact-form__turnstile:not(:empty) { min-height: 4.1rem; }
+
+/* Spec 078: formulario más amplio en escritorio */
+@media (min-width: 64rem) {
+  .final-cta__shell { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: var(--space-8); }
+  .contact-form-panel { padding: var(--space-8); }
+  .contact-form { gap: var(--space-4); }
+  .contact-form__grid { gap: var(--space-4); }
+  .contact-field { gap: 0.5rem; }
+  .contact-field label { font-size: 0.9375rem; }
+  .contact-field input, .contact-field select { min-height: 3.25rem; padding: 0.7rem 1rem; font-size: 1rem; }
+  .contact-field textarea { min-height: 9rem; padding: 0.8rem 1rem; font-size: 1rem; }
+  .contact-field__help { font-size: 0.9375rem; }
+  .contact-form-panel__intro h3 { font-size: var(--font-size-3, 1.5rem); }
+  .contact-field--checkbox label { font-size: 0.9375rem; }
+  .contact-form__actions .button { min-height: 3.25rem; padding-inline: var(--space-8); font-size: 1rem; }
+  .contact-form__status, .contact-form-panel__note { font-size: 0.9375rem; }
+}
