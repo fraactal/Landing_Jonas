@@ -8,7 +8,8 @@
     <meta name="color-scheme" content="light">
     <meta name="theme-color" content="#F3F6F9">
     <meta name="robots" content="index, follow">
-    <meta name="lead-endpoint" content="">
+    <meta name="lead-endpoint" content="https://w9psxxl2a7.execute-api.us-east-1.amazonaws.com/">
+    <meta name="turnstile-site-key" content="0x4AAAAAADrMt68bglwijprw">
     <meta name="booking-endpoint" content="">
     <link rel="canonical" href="https://jonathanvaldes.com/">
     <meta property="og:type" content="website">
@@ -29,7 +30,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/styles.css?v=074">
+    <link rel="stylesheet" href="assets/css/styles.css?v=075">
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -60,7 +61,7 @@
         ]
       }
     </script>
-    <script src="assets/js/main.js?v=s13" defer></script>
+    <script src="assets/js/main.js?v=s14" defer></script>
     <script src="assets/js/consent.js?v=s01" defer></script>
     <script src="assets/js/gallery.js?v=s01" defer></script>
   </head>
@@ -657,6 +658,8 @@
                 <label for="contact-privacy">He leído y acepto la <a href="/privacidad">Política de Privacidad</a>.</label>
               </div>
               <p class="contact-field__error contact-field__error--checkbox" id="contact-privacy-error" data-contact-error="privacyAccepted"></p>
+
+              <div class="contact-form__turnstile" data-turnstile></div>
 
               <div class="contact-form__actions">
                 <button class="button button--primary" type="submit" data-contact-submit>Enviar mi caso</button>

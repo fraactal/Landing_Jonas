@@ -744,6 +744,50 @@ if (contactForm) {
     }
   };
 
+  const turnstileSiteKey = getRuntimeEndpoint("JV_TURNSTILE_SITE_KEY", "turnstile-site-key");
+  const turnstileBox = contactForm.querySelector("[data-turnstile]");
+  let turnstileWidgetId = null;
+  let turnstileToken = "";
+
+  const renderTurnstile = () => {
+    if (!window.turnstile || !turnstileBox || turnstileWidgetId !== null) {
+      return;
+    }
+
+    turnstileWidgetId = window.turnstile.render(turnstileBox, {
+      sitekey: turnstileSiteKey,
+      theme: "light",
+      size: "flexible",
+      language: "es",
+      callback: (token) => { turnstileToken = token; },
+      "expired-callback": () => { turnstileToken = ""; },
+      "error-callback": () => { turnstileToken = ""; },
+    });
+  };
+
+  const loadTurnstile = () => {
+    if (!leadEndpoint || !turnstileSiteKey || !turnstileBox || document.querySelector("script[data-turnstile-api]")) {
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+    script.async = true;
+    script.defer = true;
+    script.dataset.turnstileApi = "";
+    script.addEventListener("load", renderTurnstile);
+    document.head.append(script);
+  };
+
+  contactForm.addEventListener("focusin", loadTurnstile, { once: true });
+
+  const resetTurnstile = () => {
+    turnstileToken = "";
+    if (window.turnstile && turnstileWidgetId !== null) {
+      window.turnstile.reset(turnstileWidgetId);
+    }
+  };
+
   const postLead = async (payload) => {
     if (!leadEndpoint) {
       throw new Error("missing_lead_endpoint");
@@ -767,7 +811,7 @@ if (contactForm) {
 
     const data = await response.json().catch(() => ({}));
 
-    if (response.status !== 201 || data.ok !== true) {
+    if (!response.ok || data.ok !== true) {
       const error = new Error(data.error || "lead_request_failed");
       error.status = response.status;
       error.payload = data;
@@ -804,6 +848,16 @@ if (contactForm) {
       return;
     }
 
+    if (turnstileSiteKey && !turnstileToken) {
+      if (turnstileWidgetId === null) {
+        loadTurnstile();
+        setContactStatus("No pudimos cargar la verificación de seguridad. Intenta de nuevo en unos segundos o escríbeme por", { includeWhatsapp: true });
+      } else {
+        setContactStatus("Completa la verificación de seguridad para enviar tu mensaje.");
+      }
+      return;
+    }
+
     if (contactSubmit) {
       contactSubmit.textContent = "Enviando...";
       contactSubmit.disabled = true;
@@ -816,11 +870,13 @@ if (contactForm) {
       email: fields.email.value.trim(),
       phone: fields.phone?.value.trim() || "",
       problemType: fields.problemType.value,
+      reason: fields.problemType.value,
       message: fields.message.value.trim(),
       privacyAccepted: fields.privacyAccepted.checked,
       source: "website",
       sourceContext: contactSourceContext?.value || "form",
       website: fields.website?.value.trim() || "",
+      turnstileToken,
     };
 
     try {
@@ -835,6 +891,7 @@ if (contactForm) {
     } catch (error) {
       setContactStatus("No pudimos enviar tu mensaje. Intenta nuevamente o contáctame por WhatsApp.", { includeWhatsapp: true });
     } finally {
+      resetTurnstile();
       if (contactSubmit) {
         contactSubmit.textContent = "Enviar mi caso";
         contactSubmit.disabled = false;

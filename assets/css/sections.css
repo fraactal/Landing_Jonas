@@ -2165,3 +2165,7 @@ figure.about__visual::after { content: ""; position: absolute; inset: auto 0 0; 
 .featured-project .button--primary { min-height: 3.5rem; padding-inline: 2.25rem; background: #20D0C8; border-color: #20D0C8; color: #0F1B28; font-size: 1.0625rem; font-weight: 800; box-shadow: 0 10px 28px rgb(32 208 200 / 30%); }
 .featured-project .button--primary:hover { background: #5BE3DC; border-color: #5BE3DC; color: #0F1B28; }
 .gallery__img { margin-block: auto; }
+
+/* Spec 077: verificación de seguridad (Turnstile) */
+.contact-form__turnstile { min-height: 0; }
+.contact-form__turnstile:not(:empty) { min-height: 4.1rem; }
