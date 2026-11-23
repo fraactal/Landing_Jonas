@@ -799,6 +799,7 @@ if (contactForm) {
         `Contacto: ${fields.email.value.trim()}${phone ? ` / ${phone}` : ""}`,
       ].join("\n");
       window.open(buildWhatsappUrl(whatsappMessage), "_blank", "noopener,noreferrer");
+      document.dispatchEvent(new CustomEvent("jv:lead", { detail: { via: "whatsapp" } }));
       setContactStatus("Abrimos WhatsApp con tu mensaje para que puedas enviarlo. Si no se abrió, abre", { includeWhatsapp: true });
       return;
     }
@@ -824,6 +825,7 @@ if (contactForm) {
 
     try {
       await postLead(payload);
+      document.dispatchEvent(new CustomEvent("jv:lead", { detail: { via: "form" } }));
       contactForm.reset();
       if (contactSourceContext) {
         contactSourceContext.value = "form";
