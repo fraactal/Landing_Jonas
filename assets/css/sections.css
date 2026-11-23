@@ -1696,7 +1696,8 @@
   .faq__panel,
   .contact-field input,
   .contact-field select,
-  .booking-slot,`r`n  .contact-field textarea {
+  .booking-slot,
+  .contact-field textarea {
     transition: none;
   }
 
@@ -1707,7 +1708,8 @@
   .faq__panel,
   .contact-field input,
   .contact-field select,
-  .booking-slot,`r`n  .contact-field textarea {
+  .booking-slot,
+  .contact-field textarea {
     transform: none;
   }
 }
@@ -2114,3 +2116,15 @@ figure.about__visual::after { content: ""; position: absolute; inset: auto 0 0; 
 .featured-project__shot { margin: 0; display: grid; gap: var(--space-2); }
 .featured-project__shot img { display: block; width: 100%; height: auto; border-radius: var(--radius-md); border: 1px solid rgb(255 255 255 / 18%); box-shadow: 0 24px 60px rgb(0 0 0 / 35%); }
 .featured-project__shot figcaption { color: var(--color-dark-muted); font-size: 0.75rem; text-align: center; }
+
+/* Spec 070: aviso de cookies */
+.cookie-banner { position: fixed; inset-inline: var(--space-3); inset-block-end: var(--space-3); z-index: 100; display: grid; gap: var(--space-3); max-width: 44rem; margin-inline: auto; padding: var(--space-4); border: 1px solid #9FB1C4; border-radius: var(--radius-md); background: #FFFFFF; color: #182B3D; box-shadow: 0 16px 48px rgb(0 0 0 / 30%); }
+.cookie-banner__text { margin: 0; font-size: var(--font-size-0); line-height: 1.5; }
+.cookie-banner__text a { color: #2B5C99; font-weight: 600; }
+.cookie-banner__actions { display: flex; gap: var(--space-3); justify-content: flex-end; }
+.cookie-banner__actions .button { min-height: 2.75rem; flex: 1; }
+@media (min-width: 48rem) { .cookie-banner { grid-template-columns: 1fr auto; align-items: center; } .cookie-banner__actions .button { flex: none; } }
+.site-footer__cookies, .legal-footer__cookies { padding: 0; border: 0; background: none; color: inherit; font: inherit; cursor: pointer; text-decoration: underline; }
+.site-footer__cookies { min-height: 2.75rem; color: var(--color-muted); font-size: var(--font-size-0); text-decoration: none; }
+.site-footer__cookies:hover { color: #FFFFFF; }
+.site-footer__cookies[hidden], .legal-footer__cookies[hidden] { display: none; }
