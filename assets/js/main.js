@@ -641,6 +641,7 @@ if (contactForm) {
   const messages = {
     name: "Ingresa tu nombre.",
     email: "Ingresa un email válido.",
+    phone: "Ingresa un teléfono válido, por ejemplo +56 9 1234 5678.",
     problemType: "Selecciona qué necesitas resolver.",
     message: "Cuéntame brevemente tu problema.",
     privacyAccepted: "Debes aceptar la Política de Privacidad para continuar.",
@@ -706,6 +707,12 @@ if (contactForm) {
       markInvalid("email");
     }
 
+    const phoneValue = fields.phone?.value || "";
+    const phoneDigits = phoneValue.replace(/\D/g, "");
+    if (!/^\+?[\d\s().-]+$/.test(phoneValue) || phoneDigits.length < 8 || phoneDigits.length > 15) {
+      markInvalid("phone");
+    }
+
     if (!problemType || !allowedProblemTypes.has(problemType)) {
       markInvalid("problemType");
     }
@@ -757,7 +764,7 @@ if (contactForm) {
     turnstileWidgetId = window.turnstile.render(turnstileBox, {
       sitekey: turnstileSiteKey,
       theme: "light",
-      size: "flexible",
+      size: turnstileBox.clientWidth < 300 ? "compact" : "flexible",
       language: "es",
       callback: (token) => { turnstileToken = token; },
       "expired-callback": () => { turnstileToken = ""; },

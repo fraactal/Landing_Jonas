@@ -2186,3 +2186,17 @@ figure.about__visual::after { content: ""; position: absolute; inset: auto 0 0; 
   .contact-form__actions .button { min-height: 3.25rem; padding-inline: var(--space-8); font-size: 1rem; }
   .contact-form__status, .contact-form-panel__note { font-size: 0.9375rem; }
 }
+
+/* Spec 079: columna de texto del contacto con más aire (escritorio) y formulario sin desbordes (móvil) */
+@media (min-width: 64rem) {
+  .final-cta__content { --flow-space: var(--space-6); max-width: 34rem; }
+  .final-cta__content h2 { line-height: 1.2; }
+  .final-cta__content p:not(.final-cta__eyebrow):not(.final-cta__note) { font-size: var(--font-size-2); line-height: 1.6; }
+  .final-cta__actions { margin-block-start: var(--space-4); }
+  .final-cta__actions .button, .final-cta__whatsapp { min-height: 3.6rem; padding-inline: var(--space-8); }
+  .final-cta__mail { margin-block-start: var(--space-4); font-size: var(--font-size-1); }
+  .final-cta__points { gap: var(--space-4); margin-block-start: var(--space-6); font-size: var(--font-size-1); }
+}
+.contact-form, .contact-form__grid, .contact-field { min-width: 0; }
+@media (max-width: 47.99rem) { .contact-form__grid { grid-template-columns: minmax(0, 1fr); } }
+.contact-form__turnstile { max-width: 100%; overflow: hidden; }

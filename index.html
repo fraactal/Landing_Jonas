@@ -30,7 +30,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/styles.css?v=076">
+    <link rel="stylesheet" href="assets/css/styles.css?v=077">
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -61,7 +61,7 @@
         ]
       }
     </script>
-    <script src="assets/js/main.js?v=s14" defer></script>
+    <script src="assets/js/main.js?v=s15" defer></script>
     <script src="assets/js/consent.js?v=s01" defer></script>
     <script src="assets/js/gallery.js?v=s01" defer></script>
   </head>
@@ -625,7 +625,8 @@
 
                 <div class="contact-field">
                   <label for="contact-phone">Teléfono / WhatsApp</label>
-                  <input id="contact-phone" name="phone" type="tel" autocomplete="tel" maxlength="40" data-contact-field="phone">
+                  <input id="contact-phone" name="phone" type="tel" autocomplete="tel" maxlength="40" required aria-describedby="contact-phone-error" data-contact-field="phone">
+                  <p class="contact-field__error" id="contact-phone-error" data-contact-error="phone"></p>
                 </div>
               </div>
 
