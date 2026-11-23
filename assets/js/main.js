@@ -896,7 +896,7 @@ if (contactForm) {
       Object.keys(messages).forEach((fieldName) => setFieldError(fieldName));
       setContactStatus("Gracias. Recibimos tu mensaje y revisaremos el caso para definir el siguiente paso.");
     } catch (error) {
-      setContactStatus("No pudimos enviar tu mensaje. Intenta nuevamente o contáctame por WhatsApp.", { includeWhatsapp: true });
+      setContactStatus("No pudimos enviar tu mensaje. Intenta nuevamente o contáctame por", { includeWhatsapp: true });
     } finally {
       resetTurnstile();
       if (contactSubmit) {
